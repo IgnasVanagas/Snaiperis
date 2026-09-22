@@ -34,7 +34,6 @@ export const Darzelinukai: React.FC<DarzelinukaiProps> = ({ onOpenRegister }) =>
           </div>
           <div className="hero-reassurance" style={{ marginTop: '22px' }}>
             <Check size={15} /> Pirmoji treniruotė nemokama
-            <span /> Patirtis nebūtina
             <span /> Pritaikyti 3–5 dydžio kamuoliai
           </div>
         </div>

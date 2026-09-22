@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'wouter';
 import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, MapPin, Phone, ShieldCheck, Target, Users } from 'lucide-react';
 import { locations } from '../data/locations';
@@ -28,11 +28,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenRegister, onSelectCoach, onSel
       <section className="hero-section" aria-labelledby="hero-title">
         <div className="site-container hero-grid">
           <div className="hero-copy">
-            <span className="eyebrow"><span className="status-dot" /> Krepšinio akademija · Kaunas · Nuo 2004</span>
             <h1 id="hero-title">Čia auga<br />daugiau nei<br /><span>krepšininkai.</span></h1>
             <p className="hero-description">Pasitikėjimas savimi. Draugystė. Meilė judėti.<br className="hidden sm:block" /> Krepšinio treniruotės 4–18 metų vaikams ir jaunimui, kur kiekvienas atranda savo vietą komandoje.</p>
             <div className="hero-actions"><button className="button-primary" onClick={() => onOpenRegister()}>Išbandyti nemokamai <ArrowUpRight size={18} /></button><a href="#gym-finder" className="text-link">Rasti treniruočių salę <ArrowRight size={17} /></a></div>
-            <div className="hero-reassurance"><Check size={15} /> Pirmoji treniruotė nemokama <span /> Patirtis nebūtina</div>
+            <div className="hero-reassurance"><Check size={15} /> Pirmoji treniruotė nemokama</div>
             <a className="hero-discover" href="#programos"><span><ArrowDown size={16} /></span> Didelė kelionė prasideda nuo pirmo metimo</a>
           </div>
           <div className="hero-visual">

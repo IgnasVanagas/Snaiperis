@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { ArrowUpRight, Check, Phone, X } from 'lucide-react';
 import { locations } from '../../data/locations';
 import { coaches } from '../../data/coaches';
@@ -49,7 +49,7 @@ export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, on
     <button ref={closeRef} onClick={onClose} aria-label="Uždaryti registraciją" className="icon-button registration-close"><X size={21} /></button>
     <span className="eyebrow"><span className="status-dot" /> Jūsų vieta komandoje</span><h2 id="registration-title">Pradėkime nuo<br />pirmos treniruotės.</h2>
     <p id="registration-description" className="registration-intro">Susipažinkite su treneriu, atraskite naujų draugų ir išbandykite krepšinį. Padėsime rasti jūsų vaikui tinkamą grupę.</p>
-    <div className="registration-benefits"><span><Check size={14} /> Pirmoji treniruotė nemokama</span><span><Check size={14} /> Patirtis nebūtina</span></div>
+    <div className="registration-benefits"><span><Check size={14} /> Pirmoji treniruotė nemokama</span></div>
     <div className="registration-fields"><label htmlFor="registration-district">Jums patogus mikrorajonas<select id="registration-district" value={district} onChange={event => { setDistrict(event.target.value); setGymName(''); setCoachName(''); }}>{locations.map(d => <option key={d.district}>{d.district}</option>)}</select></label><label htmlFor="registration-gym">Treniruočių salė<select id="registration-gym" value={gymName} onChange={event => { setGymName(event.target.value); setCoachName(''); }}><option value="">Norėčiau pagalbos renkantis</option>{gyms.map(g => <option key={g.name}>{g.name}</option>)}</select></label></div>
     <div className="registration-coach"><div><span>{contactName ? 'Jūsų treneris' : 'Padėsime išsirinkti'}</span>{contactName || 'Akademijos administracija'}</div><a href={`tel:${phone.replace(/\s+/g, '')}`}><Phone size={14} />{phone}</a></div>
     <p className="registration-next">Užpildykite akademijos registracijos anketą. Gavę ją, susisieksime ir suderinsime treniruotės laiką, vietą bei grupę.</p>
