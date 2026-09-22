@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<manifest xmlns="http://schemas.microsoft.com/wlw/manifest/weblog">
+  <weblog>
+    <serviceName>KA Snaiperis</serviceName>
+    <homepageLinkText>Krepšinio Akademija „Snaiperis“</homepageLinkText>
+    <adminUrl>https://kasnaiperis.lt/wp-admin/</adminUrl>
+    <postEditingUrl>https://kasnaiperis.lt/wp-admin/post.php?action=edit&amp;post={post-id}</postEditingUrl>
+  </weblog>
+</manifest>
