@@ -36,7 +36,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenRegister, onSelectCoach, onSel
           </div>
           <div className="hero-visual">
             <img src="/images/academy-team.jpg" alt="Snaiperio auklėtiniai kartu džiaugiasi iškovota taure" width="2048" height="1365" fetchPriority="high" className="hero-photo" />
-            <div className="hero-photo-shade" /><span className="photo-label"><span /> Viena komanda. Tūkstantis istorijų.</span>
+            <div className="hero-photo-shade" />
             <div className="hero-photo-caption"><span>Aukime kartu.</span><p>Aikštelėje ir gyvenime.</p></div><div className="hero-photo-index" aria-hidden="true">KA / 04</div>
           </div>
         </div>
