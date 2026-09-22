@@ -3,9 +3,9 @@ import {
   MapPin, 
   Search, 
   Phone, 
-  Flame, 
-  CheckCircle2,
-  Calendar,
+  Check, 
+  ArrowRight,
+  ArrowUpRight,
   X
 } from 'lucide-react';
 import { locations } from '../data/locations';
@@ -39,53 +39,43 @@ export const Priemimas: React.FC<PriemimasProps> = ({ onOpenRegister }) => {
   const hasActiveFilters = selectedDistrict !== 'Visi' || selectedYear !== 'Visi' || searchQuery.length > 0;
 
   return (
-    <div className="pt-28 pb-20 space-y-12">
-      {/* Header */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 text-center space-y-3">
-        <h1 className="text-3xl sm:text-5xl font-black font-display text-slate-900 tracking-tight max-w-3xl mx-auto">
-          Treniruočių salės ir registracija
-        </h1>
-        <p className="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">
-          Krepšinio treniruotės Kaune ir rajone vaikams nuo 4 iki 18 metų. Pirmoji bandomoji treniruotė – nemokama.
-        </p>
-
-        {/* Minimalist Trust Badges */}
-        <div className="pt-2 flex flex-wrap justify-center gap-2 sm:gap-4 text-xs font-medium text-slate-600">
-          <span className="inline-flex items-center space-x-1.5 bg-slate-100/80 px-3.5 py-1.5 rounded-full">
-            <CheckCircle2 className="w-3.5 h-3.5 text-snaiperis-red" />
-            <span>Nemokama pirmoji treniruotė</span>
-          </span>
-          <span className="inline-flex items-center space-x-1.5 bg-slate-100/80 px-3.5 py-1.5 rounded-full">
-            <CheckCircle2 className="w-3.5 h-3.5 text-snaiperis-red" />
-            <span>NVŠ kompensacija (15–50 €/mėn.)</span>
-          </span>
-          <span className="inline-flex items-center space-x-1.5 bg-slate-100/80 px-3.5 py-1.5 rounded-full">
-            <CheckCircle2 className="w-3.5 h-3.5 text-snaiperis-red" />
-            <span>Virš 15 sporto bazių Kaune</span>
-          </span>
+    <div className="subpage">
+      {/* Editorial Page Header */}
+      <header className="page-header">
+        <div className="site-container page-header-content">
+          <span className="eyebrow"><span className="status-dot" /> Priėmimas · Kaunas ir Kauno rajonas</span>
+          <h1>Treniruočių salės ir<br /><span>registracija į komandą.</span></h1>
+          <p className="page-header-desc">
+            Krepšinio treniruotės 4–18 metų vaikams ir jaunimui. Pasirinkite salę arčiau namų ir atvykite į nemokamą bandomąją treniruotę.
+          </p>
+          <div className="hero-reassurance" style={{ marginTop: '22px' }}>
+            <Check size={15} /> Pirmoji treniruotė nemokama
+            <span /> NVŠ krepšelio kompensacija (15–50 €/mėn.)
+            <span /> Virš 15 sporto bazių
+          </div>
         </div>
-      </section>
+      </header>
 
-      {/* Streamlined Filter Bar */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="bg-white rounded-3xl p-5 sm:p-6 border border-slate-200/80 shadow-sm space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
+      {/* Filter Bar */}
+      <section className="site-container pb-8">
+        <div className="editorial-card" style={{ padding: '24px' }}>
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-3 items-center">
             {/* Search Input */}
-            <div className="md:col-span-6 relative">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+            <div className="md:col-span-6 search-wrapper" style={{ maxWidth: '100%' }}>
+              <Search size={16} />
               <input
                 type="text"
-                placeholder="Ieškoti salės, adreso ar trenerio..."
+                placeholder="Ieškoti pagal salės pavadinimą, adresą ar trenerį..."
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-1 focus:ring-snaiperis-red"
               />
               {searchQuery && (
                 <button 
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3 top-3 text-slate-400 hover:text-slate-600"
+                  aria-label="Valyti paiešką"
+                  style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }}
                 >
-                  <X className="w-4 h-4" />
+                  <X size={15} />
                 </button>
               )}
             </div>
@@ -95,7 +85,15 @@ export const Priemimas: React.FC<PriemimasProps> = ({ onOpenRegister }) => {
               <select
                 value={selectedYear}
                 onChange={e => setSelectedYear(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-snaiperis-red"
+                className="w-full"
+                style={{
+                  border: '1px solid var(--line)',
+                  borderRadius: '4px',
+                  padding: '12px 14px',
+                  fontSize: '13px',
+                  background: '#fff',
+                  color: 'var(--ink)'
+                }}
               >
                 {birthYears.map(y => (
                   <option key={y} value={y}>{y === 'Visi' ? 'Visi gimimo metai' : `${y} m. gimimas`}</option>
@@ -108,7 +106,15 @@ export const Priemimas: React.FC<PriemimasProps> = ({ onOpenRegister }) => {
               <select
                 value={selectedDistrict}
                 onChange={e => setSelectedDistrict(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200/80 rounded-xl text-xs sm:text-sm font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-snaiperis-red"
+                className="w-full"
+                style={{
+                  border: '1px solid var(--line)',
+                  borderRadius: '4px',
+                  padding: '12px 14px',
+                  fontSize: '13px',
+                  background: '#fff',
+                  color: 'var(--ink)'
+                }}
               >
                 {districts.map(d => (
                   <option key={d} value={d}>{d === 'Visi' ? 'Visi mikrorajonai' : d}</option>
@@ -117,30 +123,24 @@ export const Priemimas: React.FC<PriemimasProps> = ({ onOpenRegister }) => {
             </div>
           </div>
 
-          {/* District Pills Quick Filter */}
-          <div className="flex flex-wrap gap-1.5 pt-1 border-t border-slate-100">
+          {/* District Filter Pills */}
+          <div className="filter-tabs" style={{ marginTop: '18px', paddingTop: '16px', borderTop: '1px solid var(--line)' }}>
             {districts.map(d => (
               <button
                 key={d}
+                aria-pressed={selectedDistrict === d}
                 onClick={() => setSelectedDistrict(d)}
-                className={`px-3 py-1 rounded-lg text-xs font-semibold transition-all ${
-                  selectedDistrict === d
-                    ? 'bg-snaiperis-red text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
+                className="filter-tab"
               >
-                {d}
+                {d === 'Visi' ? 'Visi rajonai' : d}
               </button>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* Gym Cards Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 space-y-4">
-        <div className="flex items-center justify-between text-xs">
-          <div className="font-bold text-slate-400 uppercase tracking-wider">
-            Rasta salių: <span className="text-slate-900">{filteredGyms.length}</span>
+        <div className="flex items-center justify-between text-xs mt-6 mb-4" style={{ color: 'var(--muted)' }}>
+          <div className="font-semibold">
+            Rasta sporto salių: <strong style={{ color: 'var(--ink)' }}>{filteredGyms.length}</strong>
           </div>
           {hasActiveFilters && (
             <button
@@ -149,100 +149,110 @@ export const Priemimas: React.FC<PriemimasProps> = ({ onOpenRegister }) => {
                 setSelectedYear('Visi');
                 setSearchQuery('');
               }}
-              className="font-semibold text-snaiperis-red hover:underline"
+              className="text-link"
+              style={{ fontSize: '11px' }}
             >
-              Išvalyti visus filtrus
+              Išvalyti filtrus
             </button>
           )}
         </div>
+      </section>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* Gym Results List */}
+      <section className="site-container pb-16">
+        <div className="gym-results">
           {filteredGyms.map((gym, idx) => {
             const matchedCoach = coaches.find(c => c.name.toLowerCase().includes(gym.coach.toLowerCase()));
             return (
-              <div
-                key={idx}
-                className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm hover:border-snaiperis-red/40 hover:shadow-md transition-all flex flex-col justify-between"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-snaiperis-red uppercase tracking-wider">
-                      {gym.district}
-                    </span>
-                    <span className="text-xs font-mono text-slate-400">
-                      {gym.years.join(', ')} m.
-                    </span>
-                  </div>
-
+              <article className="gym-result" key={`${gym.name}-${idx}`} style={{ border: '1px solid var(--line)' }}>
+                <div className="gym-location">
+                  <span className="location-icon"><MapPin size={22} /></span>
                   <div>
-                    <h3 className="font-bold text-slate-900 text-base leading-snug">
-                      {gym.name}
-                    </h3>
-                    <div className="flex items-start text-xs text-slate-500 mt-1">
-                      <MapPin className="w-3.5 h-3.5 mr-1 text-slate-400 shrink-0 mt-0.5" />
-                      <span>{gym.address}</span>
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="tag-badge tag-badge-red">{gym.district}</span>
                     </div>
-                  </div>
-
-                  {/* Coach info */}
-                  <div className="pt-3 border-t border-slate-100 flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full overflow-hidden bg-slate-100 shrink-0 border border-slate-200">
-                      <img 
-                        src={matchedCoach?.image || 'https://kasnaiperis.lt/wp-content/themes/snaiperis/assets/img/mainLogo.png'} 
-                        alt={gym.coach} 
-                        className="w-full h-full object-cover object-top" 
-                      />
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold text-slate-900">{gym.coach}</div>
-                      <a 
-                        href={`tel:${gym.phone.replace(/\s+/g, '')}`} 
-                        className="text-xs text-slate-600 hover:text-snaiperis-red flex items-center font-medium"
-                      >
-                        <Phone className="w-3 h-3 mr-1 text-snaiperis-red" />
-                        <span>{gym.phone}</span>
-                      </a>
-                    </div>
+                    <h3>{gym.name}</h3>
+                    <a 
+                      href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(gym.address)}`} 
+                      target="_blank" 
+                      rel="noreferrer"
+                    >
+                      {gym.address} <ArrowUpRight size={13} />
+                    </a>
                   </div>
                 </div>
 
-                <div className="pt-4 mt-4 border-t border-slate-100">
-                  <button
-                    onClick={() => onOpenRegister(gym.name, gym.coach)}
-                    className="w-full py-2.5 bg-slate-900 hover:bg-snaiperis-red text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors flex items-center justify-center space-x-1.5"
+                <div className="gym-details">
+                  <span>Gimimo metai</span>
+                  <p>{gym.years.join(', ')}</p>
+                  <span>Treneris</span>
+                  <p>{gym.coach}</p>
+                </div>
+
+                <div className="gym-actions">
+                  <button 
+                    onClick={() => onOpenRegister(gym.name, gym.coach)} 
+                    className="button-primary"
                   >
-                    <span>Registruotis į šią salę</span>
+                    Rinktis šią salę <ArrowRight size={16} />
                   </button>
+                  <a href={`tel:${gym.phone.replace(/\s+/g, '')}`}>
+                    <Phone size={13} />{gym.phone}
+                  </a>
                 </div>
-              </div>
+              </article>
             );
           })}
         </div>
       </section>
 
-      {/* First Training Checklist */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8">
-        <div className="bg-slate-50 rounded-3xl p-6 sm:p-8 border border-slate-200/80">
-          <h2 className="text-xl font-bold text-slate-900 mb-4">
-            Ką atsinešti į pirmąją bandomąją treniruotę?
-          </h2>
+      {/* Checklist Section */}
+      <section className="section-space" style={{ background: '#eeefe8', borderTop: '1px solid var(--line)', borderBottom: '1px solid var(--line)' }}>
+        <div className="site-container">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">Prieš pirmą treniruotę</span>
+              <h2>Ką atsinešti į salę?</h2>
+            </div>
+            <p>Jokios specialios ar brangios įrangos nereikia – svarbiausia patogumas ir gera nuotaika.</p>
+          </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-xs text-slate-600">
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm">
-              <span className="font-bold text-slate-900 block mb-1">1. Sportinė apranga</span>
-              Patogūs šortai ir marškinėliai
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { num: '01', title: 'Sportinė apranga', desc: 'Patogūs trumpi šortai ir marškinėliai, nevaržantys judesių.' },
+              { num: '02', title: 'Sportiniai bateliai', desc: 'Švari, krepšinio ar salės sportui skirta avalynė švariu padu.' },
+              { num: '03', title: 'Gertuvė su vandeniu', desc: 'Negazuotas geriamasis vanduo troškuliui numalšinti per pertraukėles.' },
+              { num: '04', title: 'Gera nuotaika', desc: 'Noras susipažinti su komanda, išbandyti metimus ir smagiai pajudėti.' }
+            ].map(item => (
+              <div key={item.num} className="editorial-card" style={{ padding: '24px' }}>
+                <span style={{ fontSize: '13px', color: 'var(--red)', fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>
+                  {item.num}
+                </span>
+                <h3 style={{ fontSize: '16px', marginTop: '12px', marginBottom: '8px' }}>{item.title}</h3>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: '1.8' }}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Closing CTA */}
+      <section className="closing-section">
+        <div className="site-container">
+          <div className="closing-card">
+            <div className="court-lines" aria-hidden="true" />
+            <div>
+              <span className="eyebrow">Pirmas žingsnis – paprastas</span>
+              <h2>Reikia patarimo<br />pasirenkant salę?</h2>
+              <p>Paskambinkite akademijos vadovui arba administracijai – parinksime patogiausią vietą ir geriausią grupę jūsų vaikui.</p>
             </div>
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm">
-              <span className="font-bold text-slate-900 block mb-1">2. Sportiniai bateliai</span>
-              Švari, salei skirta avalynė
-            </div>
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm">
-              <span className="font-bold text-slate-900 block mb-1">3. Gertuvė</span>
-              Vanduo atsigaivinimui
-            </div>
-            <div className="bg-white p-4 rounded-2xl border border-slate-200/60 shadow-sm">
-              <span className="font-bold text-slate-900 block mb-1">4. Gera nuotaika</span>
-              Noras sportuoti ir tobulėti
+            <div className="closing-actions">
+              <button onClick={() => onOpenRegister()} className="button-light">
+                Pildyti anketą <ArrowUpRight size={18} />
+              </button>
+              <a href="tel:+37067246656">
+                <Phone size={15} /> +370 672 46 656
+              </a>
             </div>
           </div>
         </div>

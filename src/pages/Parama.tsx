@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { HeartHandshake, Copy, Check, Gift, ArrowRight, Video, ExternalLink } from 'lucide-react';
+import { Copy, Check, Gift, ArrowUpRight, Phone, ExternalLink } from 'lucide-react';
 import { academyData } from '../data/academyData';
+import { Link } from 'wouter';
 
 export const Parama: React.FC = () => {
   const [copied, setCopied] = useState(false);
@@ -13,94 +14,123 @@ export const Parama: React.FC = () => {
   };
 
   return (
-    <div className="pt-24 sm:pt-28 pb-20 space-y-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-8">
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <h1 className="text-3xl sm:text-5xl font-black font-display text-slate-900 tracking-tight">
-            Skirkite 1,2% GPM
-          </h1>
-          <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-            Kiekvienas dirbantis Lietuvos pilietis gali skirti 1,2% nuo sumokėto pajamų mokesčio. Tai Jums nieko nekainuoja, o akademijos vaikams padeda augti ir tobulėti.
+    <div className="subpage">
+      {/* Editorial Page Header */}
+      <header className="page-header">
+        <div className="site-container page-header-content">
+          <span className="eyebrow"><span className="status-dot" /> 1,2 % GPM parama · Jums nekainuoja nieko</span>
+          <h1>Skirkite 1,2 % GPM.<br /><span>Padėkite įsigyti Akademijos autobusą.</span></h1>
+          <p className="page-header-desc">
+            Kiekvienas dirbantis Lietuvos pilietis gali skirti 1,2 % nuo jau sumokėto pajamų mokesčio. Jums tai nieko nekainuoja, o akademijos vaikams padeda saugiai ir patogiai keliauti į MKL bei tarptautines rungtynes.
           </p>
+          <div className="hero-reassurance" style={{ marginTop: '22px' }}>
+            <Check size={15} /> Pateikiama internetu per kelias minutes
+            <span /> Terminas iki {support.deadline}
+            <span /> Dovana kiekvienam paramos davėjui
+          </div>
         </div>
+      </header>
 
-        {/* Big Highlight Bus Goal Card */}
-        <div className="bg-snaiperis-dark text-white rounded-3xl p-6 sm:p-10 shadow-xl border border-white/10 space-y-6">
-          <div className="space-y-3">
-            <h2 className="text-2xl sm:text-3xl font-black font-display text-white">
+      {/* Main Bus Goal Highlight Card */}
+      <section className="site-container pb-16">
+        <div className="editorial-card-dark" style={{ padding: '42px 36px', maxWidth: '880px' }}>
+          <div className="court-lines" aria-hidden="true" />
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <span className="eyebrow" style={{ color: '#ffdfd8' }}>Didysis tikslas</span>
+            <h2 style={{ fontSize: 'clamp(24px, 2.8vw, 34px)', marginTop: '8px', color: '#fff' }}>
               Padėkite mums įsigyti Akademijos autobusą
             </h2>
-            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+            <p style={{ color: '#ffe6df', fontSize: '14px', lineHeight: '1.9', marginTop: '12px', maxWidth: '680px' }}>
               {support.purpose}
             </p>
-          </div>
 
-          {/* Requisites box */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 grid grid-cols-1 sm:grid-cols-2 gap-6 items-center">
-            <div>
-              <span className="text-xs text-slate-400 block uppercase tracking-wider mb-1">
-                Gavėjo identifikacinis numeris (kodas):
-              </span>
-              <div className="text-2xl sm:text-3xl font-mono font-black text-snaiperis-gold">
-                {support.code}
+            <div style={{ background: 'rgba(255, 255, 255, 0.07)', border: '1px solid rgba(255, 255, 255, 0.15)', borderRadius: '4px', padding: '24px', marginTop: '28px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '20px' }}>
+              <div>
+                <span style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '.06em', color: '#d4dbd0', display: 'block', marginBottom: '4px' }}>
+                  Gavėjo identifikacinis numeris (kodas):
+                </span>
+                <div style={{ fontSize: '32px', fontFamily: "'Outfit', sans-serif", fontWeight: 600, letterSpacing: '.02em', color: '#fff' }}>
+                  {support.code}
+                </div>
+                <span style={{ fontSize: '12px', color: '#b3bcb0', display: 'block', marginTop: '2px' }}>
+                  Paskirtis: <strong>{support.title}</strong>
+                </span>
               </div>
-              <span className="text-xs text-slate-400 block mt-1">
-                Mokesčio dalies paskirtis: <strong>{support.title}</strong>
-              </span>
-            </div>
 
-            <div className="flex sm:justify-end">
               <button
                 onClick={copyCode}
-                className={`px-5 py-3 rounded-xl font-bold text-xs flex items-center space-x-2 transition-all ${
-                  copied ? 'bg-emerald-500 text-white' : 'bg-snaiperis-red hover:bg-snaiperis-red-600 text-white shadow-sm'
-                }`}
+                className="button-light"
+                style={{ gap: '10px', minHeight: '46px', padding: '12px 20px', fontSize: '12px' }}
               >
-                {copied ? (
-                  <>
-                    <Check className="w-4 h-4" />
-                    <span>Kodas nukopijuotas!</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-4 h-4" />
-                    <span>Kopijuoti kodą ({support.code})</span>
-                  </>
-                )}
+                {copied ? <Check size={16} style={{ color: 'var(--red)' }} /> : <Copy size={16} />}
+                <span>{copied ? 'Kodas nukopijuotas!' : `Kopijuoti kodą (${support.code})`}</span>
               </button>
             </div>
-          </div>
 
-          <div className="text-xs text-slate-400">
-            * Prašymą skirti paramą per EDS sistemą galima pateikti iki <strong>{support.deadline}</strong>.
+            <div style={{ marginTop: '16px', fontSize: '11px', color: '#b3bcb0' }}>
+              * Prašymą skirti paramą per Elektroninio deklaravimo sistemą (EDS) galima pateikti iki <strong>{support.deadline}</strong>.
+            </div>
           </div>
         </div>
+      </section>
 
-        {/* Prizes for supporters */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-3">
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-snaiperis-gold flex items-center justify-center font-bold">
-              <Gift className="w-6 h-6" />
+      {/* Supporter Gifts */}
+      <section className="site-container pb-16">
+        <div style={{ maxWidth: '880px' }}>
+          <div className="editorial-card" style={{ padding: '32px' }}>
+            <div className="flex items-center gap-4 mb-4 pb-4 border-b border-[var(--line)]">
+              <div style={{ width: '46px', height: '46px', borderRadius: '4px', background: '#eeeee7', display: 'grid', placeItems: 'center', color: 'var(--red)', flexShrink: 0 }}>
+                <Gift size={24} />
+              </div>
+              <div>
+                <h2 style={{ fontSize: '20px', margin: 0 }}>Dovana kiekvienam rėmėjui!</h2>
+                <span style={{ fontSize: '12px', color: 'var(--red)', fontWeight: 600 }}>Akademijos atributika dovanų</span>
+              </div>
             </div>
+
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.9', margin: 0 }}>
+              Visiems tėveliams ir draugams, skyrusiems 1,2 % paramą KA „Snaiperis“, dovanojame oficialią akademijos atributiką – sirgalių marškinėlius, „Snapback“ kepuraitę arba suvenyrą. Pateikite EDS paraiškos patvirtinimo kopiją savo grupės treneriui ir atsiimkite dovaną.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* EDS Video Guide */}
+      <section className="site-container pb-20">
+        <div className="editorial-card" style={{ padding: '36px', maxWidth: '880px' }}>
+          <div className="section-heading" style={{ marginBottom: '24px' }}>
             <div>
-              <h3 className="text-lg sm:text-xl font-bold text-slate-900">Prizai rėmėjams!</h3>
-              <div className="text-xs text-snaiperis-red font-semibold mt-0.5">Dovana kiekvienam skyrusiam paramą</div>
+              <span className="eyebrow">Žingsnis po žingsnio</span>
+              <h2 style={{ fontSize: '24px' }}>Kaip skirti 1,2 % per EDS?</h2>
             </div>
+            <a 
+              href="https://deklaravimas.vmi.lt" 
+              target="_blank" 
+              rel="noreferrer" 
+              className="text-link"
+            >
+              Atidaryti VMI EDS <ExternalLink size={14} />
+            </a>
           </div>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Visiems, skyrusiems 1,2% paramą KA „Snaiperis“, dovanojame oficialią akademijos atributiką – sirgalių marškinėlius, „Snapback“ kepures ar suvenyrus. Pateikite deklaracijos kopiją atsiimant dovaną.
-          </p>
-        </div>
 
-        {/* Video guide */}
-        <div className="bg-snaiperis-dark rounded-3xl p-6 sm:p-8 text-white text-center space-y-4 border border-white/10">
-          <h3 className="text-lg sm:text-xl font-bold">Instrukcija: Kaip skirti paramą per EDS</h3>
-          <p className="text-xs text-slate-400 max-w-md mx-auto">
-            Prisijunkite prie VMI Elektroninio deklaravimo sistemos (EDS) ir nurodykite KA „Snaiperis“ kodą 300062828.
-          </p>
-          <div className="aspect-video max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-white/10">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '28px' }}>
+            {[
+              { num: '01', title: 'Prisijunkite prie EDS', desc: 'Apsilankykite deklaravimas.vmi.lt per el. bankininkystę.' },
+              { num: '02', title: 'Pasirinkite formą FR0512', desc: 'Skiltyje „Pildyti formą“ pasirinkite „Prašymas skirti paramą“.' },
+              { num: '03', title: 'Įrašykite kodą 300062828', desc: 'Gavėjo laukelyje nurodykite KA Snaiperis kodą 300062828.' },
+              { num: '04', title: 'Pateikite prašymą', desc: 'Paspauskite „Pateikti deklaraciją“ ir parama bus įskaityta.' }
+            ].map(step => (
+              <div key={step.num} className="editorial-card-warm" style={{ padding: '18px' }}>
+                <span style={{ fontSize: '13px', color: 'var(--red)', fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>{step.num}</span>
+                <h4 style={{ fontSize: '14px', marginBlock: '8px 4px', fontWeight: 600 }}>{step.title}</h4>
+                <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: '1.7', margin: 0 }}>{step.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ aspectRatio: '16/9', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--line)', background: '#232a26' }}>
             <iframe 
-              className="w-full h-full"
+              style={{ width: '100%', height: '100%', border: '0' }}
               src="https://www.youtube.com/embed/OnL1ypjS7pc" 
               title="KA Snaiperis Parama"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -108,7 +138,29 @@ export const Parama: React.FC = () => {
             />
           </div>
         </div>
-      </div>
+      </section>
+
+      {/* Closing CTA */}
+      <section className="closing-section">
+        <div className="site-container">
+          <div className="closing-card">
+            <div className="court-lines" aria-hidden="true" />
+            <div>
+              <span className="eyebrow">Ačiū už palaikymą</span>
+              <h2>Kiekvienas indėlis<br />padeda mūsų vaikams augti.</h2>
+              <p>Dėkojame visiems tėveliams, treneriams ir draugams, palaikantiems KA „Snaiperis“ bendruomenę.</p>
+            </div>
+            <div className="closing-actions">
+              <a href="https://deklaravimas.vmi.lt" target="_blank" rel="noreferrer" className="button-light">
+                Pildyti per EDS <ExternalLink size={16} />
+              </a>
+              <a href="tel:+37067246656">
+                <Phone size={15} /> +370 672 46 656
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

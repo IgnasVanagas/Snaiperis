@@ -1,300 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { X, CheckCircle2, Phone, Mail, User, Calendar } from 'lucide-react';
-import confetti from 'canvas-confetti';
+﻿import React, { useEffect, useRef, useState } from 'react';
+import { ArrowUpRight, Check, Phone, X } from 'lucide-react';
 import { locations } from '../../data/locations';
+import { coaches } from '../../data/coaches';
 
-interface RegistrationModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  preselectedGym?: string;
-  preselectedCoach?: string;
-}
+interface RegistrationModalProps { isOpen: boolean; onClose: () => void; preselectedGym?: string; preselectedCoach?: string; }
+// Official registration form linked by the academy's 2026–2027 admissions article.
+const REGISTRATION_URL = 'https://forms.gle/iLAMYZFidn23Zwyk8';
 
-export const RegistrationModal: React.FC<RegistrationModalProps> = ({
-  isOpen,
-  onClose,
-  preselectedGym = '',
-  preselectedCoach = ''
-}) => {
-  const [step, setStep] = useState<number>(1);
-  const [formData, setFormData] = useState({
-    parentName: '',
-    parentEmail: '',
-    parentPhone: '',
-    childName: '',
-    childBirthYear: '2016',
-    district: 'Centras',
-    gym: preselectedGym || 'Kauno Senamiesčio progimnazija',
-    notes: ''
-  });
-  const [submitted, setSubmitted] = useState(false);
+export const RegistrationModal: React.FC<RegistrationModalProps> = ({ isOpen, onClose, preselectedGym = '', preselectedCoach = '' }) => {
+  const [district, setDistrict] = useState(locations[0].district);
+  const [gymName, setGymName] = useState('');
+  const [coachName, setCoachName] = useState('');
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
-    if (preselectedGym) {
-      setFormData(prev => ({ ...prev, gym: preselectedGym }));
-      for (const d of locations) {
-        if (d.gyms.some(g => g.name === preselectedGym)) {
-          setFormData(prev => ({ ...prev, district: d.district, gym: preselectedGym }));
-          break;
-        }
-      }
-    }
-  }, [preselectedGym]);
+    if (!isOpen) return;
+    const selectedDistrict = locations.find(d => d.gyms.some(gym => gym.name === preselectedGym));
+    setDistrict(selectedDistrict?.district || locations[0].district);
+    setGymName(preselectedGym);
+    setCoachName(preselectedCoach);
+    const focused = document.activeElement as HTMLElement | null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
+    const keydown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onCloseRef.current();
+      if (event.key !== 'Tab') return;
+      const focusable = Array.from(dialogRef.current?.querySelectorAll<HTMLElement>('button,a[href],select') || []).filter(el => el.getClientRects().length > 0);
+      const first = focusable[0]; const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+    };
+    document.addEventListener('keydown', keydown);
+    return () => { document.body.style.overflow = previousOverflow; document.removeEventListener('keydown', keydown); if (focused?.isConnected) focused.focus(); };
+  }, [isOpen, preselectedGym, preselectedCoach]);
 
   if (!isOpen) return null;
+  const gyms = locations.find(d => d.district === district)?.gyms || [];
+  const gym = gyms.find(g => g.name === gymName);
+  const coach = coaches.find(c => c.name === coachName);
+  const contactName = gym?.coach || coach?.name;
+  const phone = gym?.phone || coach?.phone || '+370 672 46 656';
 
-  const currentGyms = locations.find(d => d.district === formData.district)?.gyms || [];
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-    try {
-      confetti({
-        particleCount: 70,
-        spread: 60,
-        origin: { y: 0.6 }
-      });
-    } catch {
-      // ignore
-    }
-  };
-
-  const handleReset = () => {
-    setSubmitted(false);
-    setStep(1);
-    onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in">
-      <div 
-        className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="bg-snaiperis-dark-950 text-white p-6 relative">
-          <button 
-            onClick={onClose}
-            className="absolute top-5 right-5 text-slate-400 hover:text-white p-1 rounded-full transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-          <h2 className="text-xl font-black font-display text-white">
-            Registracija į treniruotes
-          </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            Pirmoji bandomoji treniruotė – nemokama
-          </p>
-        </div>
-
-        {/* Body */}
-        <div className="p-6 overflow-y-auto flex-grow">
-          {submitted ? (
-            <div className="text-center py-6">
-              <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-3">
-                <CheckCircle2 className="w-7 h-7" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-1">Registracija gauta!</h3>
-              <p className="text-xs text-slate-600 max-w-sm mx-auto mb-5">
-                Treneris susisieks su Jumis telefonu per 24 val. ir pakvies į pirmąją nemokamą treniruotę.
-              </p>
-              <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 max-w-sm mx-auto text-left mb-5 text-xs">
-                <div><strong>Vaikas:</strong> {formData.childName} ({formData.childBirthYear} m.)</div>
-                <div><strong>Salė:</strong> {formData.gym} ({formData.district})</div>
-                {preselectedCoach && <div><strong>Treneris:</strong> {preselectedCoach}</div>}
-              </div>
-              <button
-                onClick={handleReset}
-                className="px-6 py-2.5 bg-snaiperis-red hover:bg-snaiperis-red-600 text-white text-xs font-bold uppercase tracking-wider rounded-xl transition-colors"
-              >
-                Grįžti į puslapį
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {/* Steps */}
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100 text-xs font-semibold">
-                <button
-                  type="button"
-                  onClick={() => setStep(1)}
-                  className={`flex items-center space-x-1.5 ${step === 1 ? 'text-snaiperis-red font-bold' : 'text-slate-400'}`}
-                >
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] ${step === 1 ? 'bg-snaiperis-red text-white' : 'bg-slate-100'}`}>1</span>
-                  <span>Vaikas</span>
-                </button>
-                <div className="h-0.5 flex-grow mx-3 bg-slate-100"></div>
-                <button
-                  type="button"
-                  onClick={() => setStep(2)}
-                  className={`flex items-center space-x-1.5 ${step === 2 ? 'text-snaiperis-red font-bold' : 'text-slate-400'}`}
-                >
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[11px] ${step === 2 ? 'bg-snaiperis-red text-white' : 'bg-slate-100'}`}>2</span>
-                  <span>Salė & Tėvai</span>
-                </button>
-              </div>
-
-              {step === 1 ? (
-                <div className="space-y-3.5">
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
-                      Vaiko vardas ir pavardė *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="pvz. Jonas Jonaitis"
-                      value={formData.childName}
-                      onChange={e => setFormData({ ...formData, childName: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-snaiperis-red focus:bg-white text-sm"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
-                      Vaiko gimimo metai *
-                    </label>
-                    <select
-                      value={formData.childBirthYear}
-                      onChange={e => setFormData({ ...formData, childBirthYear: e.target.value })}
-                      className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-snaiperis-red focus:bg-white text-sm font-semibold"
-                    >
-                      {['2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', 'Rinktinė'].map(y => (
-                        <option key={y} value={y}>{y} m. gimimas</option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
-                      Pastabos (neprivaloma)
-                    </label>
-                    <textarea
-                      rows={2}
-                      placeholder="Ar anksčiau lankė krepšinį..."
-                      value={formData.notes}
-                      onChange={e => setFormData({ ...formData, notes: e.target.value })}
-                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-snaiperis-red focus:bg-white text-xs"
-                    />
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (formData.childName.trim()) setStep(2);
-                      else alert('Prašome įvesti vaiko vardą ir pavardę.');
-                    }}
-                    className="w-full py-2.5 bg-snaiperis-dark hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider rounded-xl transition-colors"
-                  >
-                    Toliau: Pasirinkti salę
-                  </button>
-                </div>
-              ) : (
-                <div className="space-y-3.5">
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
-                        Mikrorajonas *
-                      </label>
-                      <select
-                        value={formData.district}
-                        onChange={e => {
-                          const dist = e.target.value;
-                          const gymsInDist = locations.find(d => d.district === dist)?.gyms || [];
-                          setFormData({ 
-                            ...formData, 
-                            district: dist, 
-                            gym: gymsInDist[0]?.name || '' 
-                          });
-                        }}
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-snaiperis-red"
-                      >
-                        {locations.map(d => (
-                          <option key={d.district} value={d.district}>{d.district}</option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
-                        Salė *
-                      </label>
-                      <select
-                        value={formData.gym}
-                        onChange={e => setFormData({ ...formData, gym: e.target.value })}
-                        className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-snaiperis-red"
-                      >
-                        {currentGyms.map(g => (
-                          <option key={g.name} value={g.name}>{g.name}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
-                      Tėvų vardas, pavardė *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Vardas Pavardė"
-                      value={formData.parentName}
-                      onChange={e => setFormData({ ...formData, parentName: e.target.value })}
-                      className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-snaiperis-red focus:bg-white"
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
-                        Telefonas *
-                      </label>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="+370 6..."
-                        value={formData.parentPhone}
-                        onChange={e => setFormData({ ...formData, parentPhone: e.target.value })}
-                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-snaiperis-red focus:bg-white"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-wider text-slate-600 mb-1">
-                        El. paštas *
-                      </label>
-                      <input
-                        type="email"
-                        required
-                        placeholder="vardas@pastas.lt"
-                        value={formData.parentEmail}
-                        onChange={e => setFormData({ ...formData, parentEmail: e.target.value })}
-                        className="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-1 focus:ring-snaiperis-red focus:bg-white"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex items-center space-x-2 pt-2">
-                    <button
-                      type="button"
-                      onClick={() => setStep(1)}
-                      className="px-4 py-2.5 border border-slate-200 text-slate-600 font-bold rounded-xl text-xs"
-                    >
-                      Atgal
-                    </button>
-                    <button
-                      type="submit"
-                      className="flex-grow py-2.5 bg-snaiperis-red hover:bg-snaiperis-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors"
-                    >
-                      Registruotis
-                    </button>
-                  </div>
-                </div>
-              )}
-            </form>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+  return <div className="registration-overlay" onClick={event => { if (event.target === event.currentTarget) onClose(); }}><div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="registration-title" aria-describedby="registration-description" className="registration-dialog">
+    <button ref={closeRef} onClick={onClose} aria-label="Uždaryti registraciją" className="icon-button registration-close"><X size={21} /></button>
+    <span className="eyebrow"><span className="status-dot" /> Jūsų vieta komandoje</span><h2 id="registration-title">Pradėkime nuo<br />pirmos treniruotės.</h2>
+    <p id="registration-description" className="registration-intro">Susipažinkite su treneriu, atraskite naujų draugų ir išbandykite krepšinį. Padėsime rasti jūsų vaikui tinkamą grupę.</p>
+    <div className="registration-benefits"><span><Check size={14} /> Pirmoji treniruotė nemokama</span><span><Check size={14} /> Patirtis nebūtina</span></div>
+    <div className="registration-fields"><label htmlFor="registration-district">Jums patogus mikrorajonas<select id="registration-district" value={district} onChange={event => { setDistrict(event.target.value); setGymName(''); setCoachName(''); }}>{locations.map(d => <option key={d.district}>{d.district}</option>)}</select></label><label htmlFor="registration-gym">Treniruočių salė<select id="registration-gym" value={gymName} onChange={event => { setGymName(event.target.value); setCoachName(''); }}><option value="">Norėčiau pagalbos renkantis</option>{gyms.map(g => <option key={g.name}>{g.name}</option>)}</select></label></div>
+    <div className="registration-coach"><div><span>{contactName ? 'Jūsų treneris' : 'Padėsime išsirinkti'}</span>{contactName || 'Akademijos administracija'}</div><a href={`tel:${phone.replace(/\s+/g, '')}`}><Phone size={14} />{phone}</a></div>
+    <p className="registration-next">Užpildykite akademijos registracijos anketą. Gavę ją, susisieksime ir suderinsime treniruotės laiką, vietą bei grupę.</p>
+    <a href={REGISTRATION_URL} target="_blank" rel="noopener noreferrer" className="button-primary">Pildyti registracijos anketą <ArrowUpRight size={18} /></a>
+    <p className="registration-footnote">Oficiali akademijos anketa atsidarys naujame lange.{gymName ? ' Pasirinktą salę nurodykite anketoje – ji neperkeliama automatiškai.' : ' Savo kontaktus pateiksite anketoje.'}</p>
+  </div></div>;
 };

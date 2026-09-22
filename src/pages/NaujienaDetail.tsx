@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useRoute, useLocation } from 'wouter';
 import { newsArticles } from '../data/news';
-import { ArrowLeft, Flame, Calendar, Tag, ChevronRight } from 'lucide-react';
+import { ArrowLeft, ArrowUpRight, Phone } from 'lucide-react';
 
 interface NaujienaDetailProps {
   onOpenRegister: () => void;
@@ -17,7 +17,6 @@ export const NaujienaDetail: React.FC<NaujienaDetailProps> = ({ onOpenRegister }
 
   const article = newsArticles.find(n => n.slug === slug) || newsArticles[0];
 
-  // Recommendations: 3 related or recent articles
   const relatedArticles = newsArticles
     .filter(n => n.id !== article.id && (n.category === article.category || !article.category))
     .slice(0, 3);
@@ -25,96 +24,95 @@ export const NaujienaDetail: React.FC<NaujienaDetailProps> = ({ onOpenRegister }
   const displayedRelated = relatedArticles.length > 0 ? relatedArticles : fallbackArticles;
 
   return (
-    <div className="pt-28 pb-16 space-y-8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-8 space-y-6">
-        <Link 
-          href="/naujienos" 
-          className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-500 hover:text-snaiperis-red transition-colors"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Atgal į naujienas</span>
-        </Link>
+    <div className="subpage">
+      <div className="site-container" style={{ paddingTop: '124px', paddingBottom: '70px' }}>
+        <div style={{ marginBottom: '24px' }}>
+          <Link href="/naujienos" className="text-link" style={{ fontSize: '12px' }}>
+            <ArrowLeft size={16} /> Visos naujienos
+          </Link>
+        </div>
 
-        <article className="bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-subtle p-6 sm:p-8 space-y-6">
-          <div className="space-y-3">
-            <h1 className="text-2xl sm:text-3xl font-black font-display text-slate-900 tracking-tight leading-tight">
+        {/* Article Reader Card */}
+        <article className="editorial-card" style={{ padding: '40px', maxWidth: '840px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '24px' }}>
+            <div className="news-meta" style={{ marginTop: 0, marginBottom: '14px' }}>
+              <span className="tag-badge tag-badge-red">{article.category}</span>
+              <time dateTime={article.date} style={{ color: 'var(--muted)', fontSize: '12px' }}>
+                {article.date.split('-').join('.')}
+              </time>
+            </div>
+
+            <h1 style={{ fontSize: 'clamp(26px, 3.5vw, 40px)', lineHeight: '1.2', marginBlock: '10px 0' }}>
               {article.title}
             </h1>
-
-            <div className="flex items-center space-x-2 text-xs">
-              <span className="bg-red-50 text-snaiperis-red font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider text-[10px]">
-                {article.category}
-              </span>
-              <span className="text-slate-400 font-medium">
-                {article.date}
-              </span>
-            </div>
           </div>
 
-          <div className="rounded-xl overflow-hidden bg-slate-100 aspect-video max-h-[380px] w-full">
+          <div style={{ aspectRatio: '16/10', maxHeight: '440px', width: '100%', borderRadius: '4px', overflow: 'hidden', background: '#e7e8df', marginBottom: '32px' }}>
             <img 
               src={article.image} 
               alt={article.title} 
-              className="w-full h-full object-cover"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               onError={(e) => {
-                (e.target as HTMLImageElement).src = 'https://kasnaiperis.lt/wp-content/uploads/2026/08/cempionatu-titulinis-1.jpg';
+                (e.target as HTMLImageElement).src = '/images/academy-team.jpg';
               }}
             />
           </div>
 
           <div 
-            className="prose prose-slate max-w-none text-slate-700 leading-relaxed text-sm space-y-3"
+            style={{ fontSize: '15px', color: 'var(--ink)', lineHeight: '1.9' }}
             dangerouslySetInnerHTML={{ __html: article.content }}
           />
 
-          <div className="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50 p-4 rounded-xl">
-            <div className="text-xs">
-              <span className="font-bold text-slate-900 block">Krepšinio treniruotės Kaune</span>
-              <span className="text-slate-500">Priimame vaikus nuo 4 metų į treniruotes.</span>
+          <div className="editorial-card-warm" style={{ padding: '24px', marginTop: '40px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+            <div>
+              <h4 style={{ fontSize: '15px', fontWeight: 600, margin: 0 }}>Krepšinio treniruotės Kaune</h4>
+              <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '4px 0 0' }}>Priimame vaikus nuo 4 metų į treniruočių grupes visame mieste.</p>
             </div>
             <button
               onClick={onOpenRegister}
-              className="px-4 py-2 bg-snaiperis-red hover:bg-snaiperis-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors flex items-center space-x-1.5 shrink-0"
+              className="button-primary"
+              style={{ minHeight: '44px', padding: '10px 18px', fontSize: '11px' }}
             >
-              <Flame className="w-3.5 h-3.5" />
-              <span>Registruotis</span>
+              Nemokama treniruotė <ArrowUpRight size={15} />
             </button>
           </div>
         </article>
 
         {/* Related News */}
         {displayedRelated.length > 0 && (
-          <div className="pt-6 space-y-4">
-            <h2 className="text-base font-bold text-slate-900">
-              Kitos akademijos naujienos
-            </h2>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <section style={{ maxWidth: '840px', margin: '60px auto 0' }}>
+            <div className="flex items-center justify-between mb-6">
+              <h2 style={{ fontSize: '22px' }}>Kitos akademijos naujienos</h2>
+              <Link href="/naujienos" className="text-link" style={{ fontSize: '12px' }}>
+                Visos naujienos <ArrowUpRight size={14} />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
               {displayedRelated.map(item => (
-                <Link
-                  key={item.id}
-                  href={`/naujienos/${item.slug}`}
-                  className="bg-white rounded-2xl p-3 border border-slate-200/80 hover:border-snaiperis-red/40 transition-all flex flex-col justify-between space-y-2 group shadow-sm"
-                >
-                  <div className="aspect-video rounded-xl overflow-hidden bg-slate-100">
+                <Link key={item.id} href={`/naujienos/${item.slug}`} className="news-card">
+                  <div className="news-image">
                     <img 
                       src={item.image} 
                       alt={item.title} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://kasnaiperis.lt/wp-content/uploads/2026/08/cempionatu-titulinis-1.jpg';
-                      }}
+                      loading="lazy" 
+                      onError={e => { 
+                        if (!e.currentTarget.src.endsWith('/images/academy-team.jpg')) {
+                          e.currentTarget.src = '/images/academy-team.jpg'; 
+                        }
+                      }} 
                     />
                   </div>
-                  <div>
-                    <h3 className="text-xs font-bold text-slate-900 group-hover:text-snaiperis-red transition-colors line-clamp-2">
-                      {item.title}
-                    </h3>
-                    <div className="text-[10px] text-slate-400 mt-1">{item.date}</div>
+                  <div className="news-meta">
+                    <span>{item.category}</span>
+                    <time>{item.date.split('-').join('.')}</time>
                   </div>
+                  <h3 style={{ fontSize: '16px', marginBlock: '8px 14px' }}>{item.title}</h3>
+                  <span className="news-read">Skaityti <ArrowUpRight size={14} /></span>
                 </Link>
               ))}
             </div>
-          </div>
+          </section>
         )}
       </div>
     </div>

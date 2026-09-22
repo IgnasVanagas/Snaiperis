@@ -1,38 +1,77 @@
 import React from 'react';
 import { academyData } from '../data/academyData';
-import { Trophy, Calendar, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ArrowUpRight, Phone, Check } from 'lucide-react';
+import { Link } from 'wouter';
 
 export const Istorija: React.FC = () => {
   return (
-    <div className="pt-24 sm:pt-28 pb-20 space-y-12">
-      {/* Header */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 text-center space-y-3">
-        <h1 className="text-3xl sm:text-5xl font-black font-display text-slate-900 tracking-tight max-w-3xl mx-auto">
-          Akademijos istorija
-        </h1>
-        <p className="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto">
-          Per daugiau nei 20 metų KA „Snaiperis“ išaugo į vieną didžiausių ir labiausiai pripažintų krepšinio organizacijų Kaune.
-        </p>
-      </section>
+    <div className="subpage">
+      {/* Editorial Page Header */}
+      <header className="page-header">
+        <div className="site-container page-header-content">
+          <span className="eyebrow"><span className="status-dot" /> Mūsų kelias · Kaunas · Nuo 2004 metų</span>
+          <h1>Daugiau nei du dešimtmečiai<br /><span>meilės krepšiniui.</span></h1>
+          <p className="page-header-desc">
+            Nuo kelių entuziastingų trenerių ir pirmosios salės iki vienos didžiausių, labiausiai vertinamų ir moderniausių vaikų bei jaunimo krepšinio organizacijų Kaune.
+          </p>
+          <div className="hero-reassurance" style={{ marginTop: '22px' }}>
+            <Check size={15} /> Įkurta 2004 m. Kaune
+            <span /> Virš 1 000 auklėtinių kasmet
+            <span /> RKL, NKL ir LKL žaidėjai
+          </div>
+        </div>
+        <div className="site-container stats-strip" style={{ marginTop: '40px' }}>
+          {[
+            ['20+', 'metų auginame asmenybes'],
+            ['1 000+', 'vaikų mūsų bendruomenėje'],
+            ['22', 'treneriai ir pedagogai'],
+            ['15+', 'sporto salių arčiau namų']
+          ].map(([value, label]) => (
+            <div className="stat" key={label}>
+              <strong>{value}<span>.</span></strong>
+              <span>{label}</span>
+            </div>
+          ))}
+        </div>
+      </header>
 
-      {/* Interactive Timeline */}
-      <section className="max-w-3xl mx-auto px-4 sm:px-8">
-        <div className="relative border-l-2 border-slate-200 pl-6 sm:pl-8 space-y-8 ml-4 sm:ml-8">
+      {/* Interactive Milestones Timeline */}
+      <section className="site-container pb-20">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">Svarbiausi etapai</span>
+            <h2>Akademijos metraštis.</h2>
+          </div>
+          <p>Kiekvieni metai atneša naujų iššūkių, pergalių ir išaugina naują krepšinio mylėtojų kartą.</p>
+        </div>
+
+        <div style={{ position: 'relative', borderLeft: '1px solid var(--line)', paddingLeft: '32px', marginLeft: '16px', display: 'grid', gap: '32px' }}>
           {academyData.milestones.map((m, idx) => (
-            <div key={idx} className="relative group">
+            <div key={idx} style={{ position: 'relative' }}>
               {/* Dot */}
-              <div className="absolute -left-[31px] sm:-left-[39px] top-1.5 w-4 h-4 rounded-full bg-snaiperis-red border-2 border-white shadow-sm group-hover:scale-125 transition-transform"></div>
+              <div 
+                style={{ 
+                  position: 'absolute', 
+                  left: '-37px', 
+                  top: '16px', 
+                  width: '9px', 
+                  height: '9px', 
+                  borderRadius: '50%', 
+                  background: 'var(--red)', 
+                  outline: '4px solid var(--paper)' 
+                }} 
+              />
 
-              <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm hover:shadow-md transition-all space-y-2">
-                <div className="flex items-center justify-between gap-3">
-                  <h3 className="text-lg sm:text-xl font-bold text-slate-900 group-hover:text-snaiperis-red transition-colors">
+              <div className="editorial-card" style={{ padding: '24px 28px' }}>
+                <div className="flex items-center justify-between gap-4 mb-2">
+                  <h3 style={{ fontSize: '18px', margin: 0 }}>
                     {m.title}
                   </h3>
-                  <span className="bg-red-50 text-snaiperis-red text-xs font-bold px-3 py-1 rounded-full shrink-0">
+                  <span className="tag-badge tag-badge-red" style={{ fontSize: '11px', padding: '4px 10px' }}>
                     {m.year}
                   </span>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.8', margin: 0 }}>
                   {m.desc}
                 </p>
               </div>
@@ -41,24 +80,48 @@ export const Istorija: React.FC = () => {
         </div>
       </section>
 
-      {/* Featured archive video */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-8">
-        <div className="bg-snaiperis-dark text-white rounded-3xl p-6 sm:p-10 text-center space-y-5 border border-white/10">
-          <Trophy className="w-10 h-10 text-snaiperis-gold mx-auto" />
-          <h2 className="text-2xl sm:text-3xl font-black font-display">
-            Kartu kurkime savo istoriją
-          </h2>
-          <p className="text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
-            Kiekviena karta, kiekviena treniruotė ir kiekviena pergalė įrašo naują puslapį į KA „Snaiperis“ metraštį.
-          </p>
-          <div className="aspect-video max-w-3xl mx-auto rounded-2xl overflow-hidden shadow-xl border border-white/10">
+      {/* Featured Archive Video in Dark Editorial Card */}
+      <section className="site-container pb-20">
+        <div className="editorial-card-dark" style={{ padding: '48px 36px' }}>
+          <div className="court-lines" aria-hidden="true" />
+          <div style={{ position: 'relative', zIndex: 1, textAlign: 'center', maxWidth: '680px', margin: '0 auto 32px' }}>
+            <span className="eyebrow" style={{ color: '#ffdfd8', justifyContent: 'center' }}>Dokumentika</span>
+            <h2 style={{ fontSize: 'clamp(26px, 3vw, 36px)', marginTop: '12px' }}>Kartu kurkime savo istoriją.</h2>
+            <p style={{ color: '#ffe6df', fontSize: '13px', lineHeight: '1.9', marginTop: '12px' }}>
+              Kiekviena karta, kiekviena treniruotė ir kiekviena pergalė įrašo naują puslapį į KA „Snaiperis“ metraštį.
+            </p>
+          </div>
+
+          <div style={{ position: 'relative', zIndex: 1, aspectRatio: '16/9', maxWidth: '820px', margin: '0 auto', borderRadius: '4px', overflow: 'hidden', border: '1px solid rgba(255,255,255,0.15)' }}>
             <iframe 
-              className="w-full h-full"
+              style={{ width: '100%', height: '100%', border: '0' }}
               src="https://www.youtube.com/embed/OnL1ypjS7pc" 
               title="KA Snaiperis Istorija"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
+          </div>
+        </div>
+      </section>
+
+      {/* Closing CTA */}
+      <section className="closing-section">
+        <div className="site-container">
+          <div className="closing-card">
+            <div className="court-lines" aria-hidden="true" />
+            <div>
+              <span className="eyebrow">Aukime kartu</span>
+              <h2>Tapkite Snaiperio<br />istorijos dalimi.</h2>
+              <p>Kviečiame vaikus ir jaunuolius prisijungti prie mūsų didelės krepšinio šeimos Kaune.</p>
+            </div>
+            <div className="closing-actions">
+              <Link href="/priemimas" className="button-light">
+                Rasti treniruočių salę <ArrowUpRight size={18} />
+              </Link>
+              <a href="tel:+37067246656">
+                <Phone size={15} /> +370 672 46 656
+              </a>
+            </div>
           </div>
         </div>
       </section>

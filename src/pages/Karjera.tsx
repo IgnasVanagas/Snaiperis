@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Briefcase, CheckCircle2, Send, Phone, Mail, Award, HeartHandshake } from 'lucide-react';
+import { Check, ArrowUpRight, Phone, Send, Mail } from 'lucide-react';
+import { Link } from 'wouter';
 
 export const Karjera: React.FC = () => {
   const [submitted, setSubmitted] = useState(false);
@@ -17,89 +18,98 @@ export const Karjera: React.FC = () => {
   };
 
   return (
-    <div className="pt-24 sm:pt-28 pb-20 space-y-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-8">
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <h1 className="text-3xl sm:text-5xl font-black font-display text-slate-900 tracking-tight">
-            Karjera KA „Snaiperis“
-          </h1>
-          <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-            Esame veržli sporto organizacija. Mus vienija meilė krepšiniui, noras tobulėti ir kurti geriausias sąlygas auklėtiniams.
+    <div className="subpage">
+      <header className="page-header">
+        <div className="site-container page-header-content">
+          <span className="eyebrow"><span className="status-dot" /> Komanda ir augimas · Kviečiame trenerius</span>
+          <h1>Karjera KA „Snaiperis“.<br /><span>Aukime kartu su komanda.</span></h1>
+          <p className="page-header-desc">
+            Esame veržli sporto organizacija Kaune. Mus vienija meilė krepšiniui, pagarba auklėtiniams ir noras tobulėti. Kviečiame prisijungti prie mūsų 22 pedagogų komandos.
           </p>
+          <div className="hero-reassurance" style={{ marginTop: '22px' }}>
+            <Check size={15} /> Konkurencingas atlygis ir socialinės garantijos
+            <span /> Apmokami kvalifikacijos seminarai
+            <span /> Draugiška ir palaikanti bendruomenė
+          </div>
+        </div>
+      </header>
+
+      {/* Benefits Grid */}
+      <section className="site-container pb-16">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">Kodėl Snaiperis?</span>
+            <h2>Geros sąlygos dirbti<br />ir tobulėti kartu.</h2>
+          </div>
+          <p>Kuriame aplinką, kurioje kiekvienas treneris gali realizuoti savo idėjas ir siekti aukščiausių rezultatų.</p>
         </div>
 
-        {/* Benefits Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-2">
-            <div className="w-10 h-10 rounded-xl bg-red-50 text-snaiperis-red flex items-center justify-center font-bold">
-              🏀
-            </div>
-            <h3 className="font-bold text-slate-900 text-base">Mėgstamas darbas</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Kiekvieną dieną dirbkite su krepšiniu, realizuokite savo idėjas ir ugdykite ateities talentus.
+          <div className="editorial-card" style={{ padding: '28px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--red)', fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>01</span>
+            <h3 style={{ fontSize: '19px', marginTop: '10px', marginBottom: '8px' }}>Mėgstamas darbas</h3>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.8' }}>
+              Kiekvieną dieną būkite krepšinio aikštelėje, perduokite žinias ir ugdykite naujosios kartos čempionus.
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-2">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
-              📈
-            </div>
-            <h3 className="font-bold text-slate-900 text-base">Kvalifikacijos kėlimas</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              Akademija skatina ir apmoka trenerių seminarus, licencijų kėlimą bei stažuotes Lietuvoje ir užsienyje.
+          <div className="editorial-card" style={{ padding: '28px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--red)', fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>02</span>
+            <h3 style={{ fontSize: '19px', marginTop: '10px', marginBottom: '8px' }}>Kvalifikacijos kėlimas</h3>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.8' }}>
+              Akademija apmoka trenerių seminarus, licencijų atnaujinimą bei tarptautines stažuotes Lietuvoje ir Europoje.
             </p>
           </div>
 
-          <div className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-sm space-y-2">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-              🤝
-            </div>
-            <h3 className="font-bold text-slate-900 text-base">Draugiška bendruomenė</h3>
-            <p className="text-xs text-slate-500 leading-relaxed">
-              22 trenerių ir administracijos komanda, kurioje visada rasi pagalbą, patarimą ir bendraminčių palaikymą.
+          <div className="editorial-card" style={{ padding: '28px' }}>
+            <span style={{ fontSize: '12px', color: 'var(--red)', fontFamily: "'Outfit', sans-serif", fontWeight: 600 }}>03</span>
+            <h3 style={{ fontSize: '19px', marginTop: '10px', marginBottom: '8px' }}>Draugiška bendruomenė</h3>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.8' }}>
+              22 trenerių ir administracijos kolektyvas, kuriame visada sulauksite pagalbos, patarimų ir nuoširdaus palaikymo.
             </p>
           </div>
         </div>
+      </section>
 
-        {/* Application Form */}
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm">
+      {/* Application Form */}
+      <section className="site-container pb-20">
+        <div className="editorial-card" style={{ padding: '36px', maxWidth: '780px' }}>
           {submitted ? (
-            <div className="text-center py-8 space-y-3">
-              <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-6 h-6" />
-              </div>
-              <h3 className="text-xl font-bold text-slate-900">Ačiū! Jūsų kandidatūra gauta.</h3>
-              <p className="text-xs text-slate-600 max-w-md mx-auto">
-                Akademijos vadovybė peržiūrės Jūsų pateiktą informaciją ir susisieks pokalbiui artimiausiu metu.
+            <div style={{ textAlign: 'center', padding: '36px 0' }}>
+              <span className="eyebrow" style={{ justifyContent: 'center' }}><span className="status-dot" /> Kandidatūra gauta</span>
+              <h2 style={{ fontSize: '28px', marginTop: '14px' }}>Ačiū už Jūsų susidomėjimą!</h2>
+              <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: '1.8', maxWidth: '480px', margin: '14px auto 0' }}>
+                Akademijos vadovybė peržiūrės pateiktą informaciją ir artimiausiu metu susisieks pokalbiui.
               </p>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-1">
-                <h3 className="text-lg font-bold text-slate-900">Trenerio / pedagogo anketa</h3>
-                <p className="text-xs text-slate-500">
-                  Užpildykite anketą arba atsiųskite savo CV el. paštu <strong>info@kasnaiperis.lt</strong>
+            <form onSubmit={handleSubmit}>
+              <div style={{ paddingBottom: '20px', borderBottom: '1px solid var(--line)', marginBottom: '24px' }}>
+                <span className="eyebrow"><span className="status-dot" /> Kandidato anketa</span>
+                <h2 style={{ fontSize: '24px', marginTop: '8px' }}>Prisijunkite prie Snaiperio</h2>
+                <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '4px' }}>
+                  Užpildykite anketą arba atsiųskite savo CV el. paštu <strong style={{ color: 'var(--ink)' }}>info@kasnaiperis.lt</strong>
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '6px' }}>
                     Vardas, pavardė *
                   </label>
                   <input
                     type="text"
                     required
-                    placeholder="Vardas Pavardė"
+                    placeholder="Jūsų vardas ir pavardė"
                     value={formData.name}
                     onChange={e => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-snaiperis-red"
+                    style={{ width: '100%', border: '1px solid var(--line)', borderRadius: '4px', padding: '12px 14px', fontSize: '13px' }}
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">
-                    Telefonas *
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '6px' }}>
+                    Telefono numeris *
                   </label>
                   <input
                     type="tel"
@@ -107,14 +117,14 @@ export const Karjera: React.FC = () => {
                     placeholder="+370 6..."
                     value={formData.phone}
                     onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-snaiperis-red"
+                    style={{ width: '100%', border: '1px solid var(--line)', borderRadius: '4px', padding: '12px 14px', fontSize: '13px' }}
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">
-                  El. paštas *
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '6px' }}>
+                  El. pašto adresas *
                 </label>
                 <input
                   type="email"
@@ -122,35 +132,57 @@ export const Karjera: React.FC = () => {
                   placeholder="vardas@pastas.lt"
                   value={formData.email}
                   onChange={e => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-snaiperis-red"
+                  style={{ width: '100%', border: '1px solid var(--line)', borderRadius: '4px', padding: '12px 14px', fontSize: '13px' }}
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">
-                  Trumpas patirties aprašymas ir motyvacija
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '6px' }}>
+                  Trumpas patirties aprašymas ir motyvacija *
                 </label>
                 <textarea
                   rows={4}
                   required
-                  placeholder="Papasakokite apie savo krepšinio ar pedagoginę patirtį ir kodėl norėtumėte dirbti su vaikais..."
+                  placeholder="Papasakokite apie savo pedagoginę ar krepšinio patirtį ir kodėl norėtumėte dirbti su vaikais..."
                   value={formData.message}
                   onChange={e => setFormData({ ...formData, message: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-snaiperis-red"
+                  style={{ width: '100%', border: '1px solid var(--line)', borderRadius: '4px', padding: '12px 14px', fontSize: '13px' }}
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 bg-snaiperis-red hover:bg-snaiperis-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all shadow-sm flex items-center justify-center space-x-2"
+                className="button-primary"
+                style={{ width: '100%' }}
               >
-                <Send className="w-4 h-4" />
-                <span>Siųsti kandidatūrą</span>
+                Siųsti kandidatūrą <Send size={16} />
               </button>
             </form>
           )}
         </div>
-      </div>
+      </section>
+
+      {/* Closing CTA */}
+      <section className="closing-section">
+        <div className="site-container">
+          <div className="closing-card">
+            <div className="court-lines" aria-hidden="true" />
+            <div>
+              <span className="eyebrow">Turite klausimų?</span>
+              <h2>Susisiekite tiesiogiai<br />su akademijos vadovu.</h2>
+              <p>Mielai atsakysime į klausimus dėl darbo sąlygų, salių ir krūvio.</p>
+            </div>
+            <div className="closing-actions">
+              <a href="tel:+37067246656" className="button-light">
+                <Phone size={15} /> +370 672 46 656
+              </a>
+              <a href="mailto:info@kasnaiperis.lt">
+                <Mail size={15} /> info@kasnaiperis.lt
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 };

@@ -63,7 +63,7 @@ export function App() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-50 text-slate-900 font-sans antialiased">
+    <div className="flex flex-col min-h-screen bg-[var(--paper)] text-[var(--ink)] font-sans antialiased">
       {/* Top Navbar */}
       <Navbar 
         onOpenSearch={() => setIsSearchOpen(true)} 
@@ -71,7 +71,7 @@ export function App() {
       />
 
       {/* Main Content Area */}
-      <main className="flex-grow">
+      <main id="main-content" className="flex-grow" tabIndex={-1}>
         <Switch>
           {/* Core Routes */}
           <Route path="/">

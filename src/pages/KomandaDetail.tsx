@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useRoute, useLocation } from 'wouter';
 import { teams } from '../data/teams';
 import { coaches } from '../data/coaches';
-import { Users, MapPin, Calendar, Trophy, ArrowLeft, Phone, Mail, Flame, ChevronRight } from 'lucide-react';
+import { Users, MapPin, Calendar, Trophy, ArrowLeft, ArrowUpRight, Phone, Mail, Check } from 'lucide-react';
 
 interface KomandaDetailProps {
   onOpenRegister: (gym?: string, coach?: string) => void;
@@ -22,125 +22,115 @@ export const KomandaDetail: React.FC<KomandaDetailProps> = ({ onOpenRegister }) 
   );
 
   return (
-    <div className="pt-28 pb-16 space-y-8">
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-6">
-        <Link 
-          href="/komandos" 
-          className="inline-flex items-center space-x-1.5 text-xs font-bold text-slate-500 hover:text-snaiperis-red transition-colors"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Atgal į visas komandas</span>
-        </Link>
+    <div className="subpage">
+      <div className="site-container" style={{ paddingTop: '124px', paddingBottom: '70px' }}>
+        <div style={{ marginBottom: '24px' }}>
+          <Link href="/komandos" className="text-link" style={{ fontSize: '12px' }}>
+            <ArrowLeft size={16} /> Visos komandos
+          </Link>
+        </div>
 
         {/* Team Banner */}
-        <div className="bg-white rounded-2xl overflow-hidden border border-slate-200 shadow-card">
-          <div className="relative aspect-video max-h-80 w-full bg-slate-900">
+        <div style={{ borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--line)', background: '#fff' }}>
+          <div style={{ position: 'relative', aspectRatio: '21/9', minHeight: '260px', background: '#232a26', overflow: 'hidden' }}>
             <img 
               src={team.image} 
               alt={team.name} 
-              className="w-full h-full object-cover"
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
               onError={(e) => {
-                (e.target as HTMLImageElement).src = 'https://kasnaiperis.lt/wp-content/uploads/2026/08/cempionatu-titulinis-1.jpg';
+                (e.target as HTMLImageElement).src = '/images/academy-team.jpg';
               }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-            <div className="absolute bottom-5 left-5 right-5 text-white space-y-2">
-              <h1 className="text-2xl sm:text-3xl font-black font-display text-white">
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(20, 29, 23, 0.2), rgba(20, 29, 23, 0.85))' }} />
+            <div style={{ position: 'absolute', left: '32px', right: '32px', bottom: '28px', color: '#fff' }}>
+              <div style={{ display: 'flex', gap: '8px', marginBottom: '12px' }}>
+                <span className="tag-badge tag-badge-red">{team.year} m. gimimas</span>
+                <span className="tag-badge" style={{ background: '#ffffff30', color: '#fff' }}>{team.division}</span>
+              </div>
+              <h1 style={{ color: '#fff', fontSize: 'clamp(28px, 3.5vw, 44px)', margin: 0 }}>
                 {team.name}
               </h1>
-              <div className="flex gap-2 text-xs">
-                <span className="bg-snaiperis-red px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                  {team.year} m. gim.
-                </span>
-                <span className="bg-white/20 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-wider">
-                  {team.division}
-                </span>
-              </div>
             </div>
           </div>
 
-          <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2 space-y-5">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8" style={{ padding: '36px' }}>
+            <div className="lg:col-span-2 space-y-6">
               <div>
-                <h3 className="text-base font-bold text-slate-900 mb-1.5">Apie komandą</h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                <span className="eyebrow" style={{ marginBottom: '8px' }}><span className="status-dot" /> Reprezentacinė komanda</span>
+                <h2 style={{ fontSize: '24px', marginBottom: '12px' }}>Apie komandą</h2>
+                <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: '1.9' }}>
                   {team.description}
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <h3 className="text-base font-bold text-slate-900">Treniruočių informacija</h3>
-                <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200 space-y-2 text-xs text-slate-700">
-                  <div className="flex items-center">
-                    <Calendar className="w-3.5 h-3.5 mr-2 text-snaiperis-red shrink-0" />
-                    <span>{team.schedule}</span>
+              <div style={{ borderTop: '1px solid var(--line)', paddingTop: '24px' }}>
+                <h3 style={{ fontSize: '18px', marginBottom: '14px' }}>Treniruočių informacija</h3>
+                <div className="editorial-card-warm" style={{ padding: '20px', display: 'grid', gap: '12px', fontSize: '13px' }}>
+                  <div className="flex items-center gap-3">
+                    <Calendar size={16} style={{ color: 'var(--red)', flexShrink: 0 }} />
+                    <span><strong>Tvarkaraštis:</strong> {team.schedule}</span>
                   </div>
-                  <div className="flex items-center">
-                    <MapPin className="w-3.5 h-3.5 mr-2 text-snaiperis-red shrink-0" />
-                    <span>{team.hall}</span>
+                  <div className="flex items-center gap-3">
+                    <MapPin size={16} style={{ color: 'var(--red)', flexShrink: 0 }} />
+                    <span><strong>Sporto salė:</strong> {team.hall}</span>
                   </div>
-                  <div className="flex items-center">
-                    <Trophy className="w-3.5 h-3.5 mr-2 text-snaiperis-red shrink-0" />
-                    <span>MKL (Moksleivių krepšinio lyga) ir KKML</span>
+                  <div className="flex items-center gap-3">
+                    <Trophy size={16} style={{ color: 'var(--red)', flexShrink: 0 }} />
+                    <span><strong>Pirmenybės:</strong> Moksleivių krepšinio lyga (MKL) ir KKML</span>
                   </div>
                 </div>
               </div>
 
-              <button
-                onClick={() => onOpenRegister(team.hall, team.coach)}
-                className="px-5 py-2.5 bg-snaiperis-red hover:bg-snaiperis-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors flex items-center space-x-1.5"
-              >
-                <Flame className="w-3.5 h-3.5" />
-                <span>Registruotis į peržiūrą</span>
-              </button>
+              <div style={{ paddingTop: '10px' }}>
+                <button
+                  onClick={() => onOpenRegister(team.hall, team.coach)}
+                  className="button-primary"
+                >
+                  Registruotis į peržiūrą <ArrowUpRight size={17} />
+                </button>
+              </div>
             </div>
 
-            {/* Coach card */}
-            <div className="bg-slate-50 rounded-xl p-5 border border-slate-200 space-y-3">
-              <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">
-                Vyriausiasis treneris
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 rounded-xl overflow-hidden bg-slate-200 shrink-0 border border-slate-300">
-                  <img 
-                    src={matchedCoach?.image || 'https://kasnaiperis.lt/wp-content/themes/snaiperis/assets/img/mainLogo.png'} 
-                    alt={team.coach}
-                    className="w-full h-full object-cover object-top"
-                  />
+            {/* Coach Card */}
+            <div>
+              <div className="editorial-card" style={{ padding: '24px' }}>
+                <span className="eyebrow" style={{ marginBottom: '14px' }}>Vyriausiasis treneris</span>
+                <div className="flex items-center gap-4">
+                  <div style={{ width: '60px', height: '60px', borderRadius: '4px', overflow: 'hidden', background: '#e7e8df', flexShrink: 0 }}>
+                    <img 
+                      src={matchedCoach?.image || '/images/academy-team.jpg'} 
+                      alt={team.coach}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+                    />
+                  </div>
+                  <div>
+                    <h4 style={{ fontSize: '16px', fontWeight: 600 }}>{team.coach}</h4>
+                    <span style={{ fontSize: '12px', color: 'var(--muted)', display: 'block', marginTop: '2px' }}>{matchedCoach?.role || 'Treneris'}</span>
+                    {matchedCoach && (
+                      <Link 
+                        href={`/treneriai/${matchedCoach.slug}`}
+                        className="text-link"
+                        style={{ fontSize: '11px', marginTop: '6px' }}
+                      >
+                        Trenerio profilis <ArrowUpRight size={13} />
+                      </Link>
+                    )}
+                  </div>
                 </div>
-                <div>
-                  <h4 className="font-bold text-slate-900 text-sm">{team.coach}</h4>
-                  <div className="text-xs text-slate-500">{matchedCoach?.role || 'Treneris'}</div>
-                  {matchedCoach && (
-                    <Link 
-                      href={`/treneriai/${matchedCoach.slug}`}
-                      className="text-[11px] font-bold text-snaiperis-red hover:underline inline-flex items-center mt-1"
-                    >
-                      <span>Trenerio profilis</span>
-                      <ChevronRight className="w-3 h-3 ml-0.5" />
-                    </Link>
-                  )}
-                </div>
-              </div>
 
-              {matchedCoach && (
-                <div className="pt-2 border-t border-slate-200 space-y-1 text-xs">
-                  <a 
-                    href={`tel:${matchedCoach.phone.replace(/\s+/g, '')}`}
-                    className="flex items-center text-slate-700 hover:text-snaiperis-red font-medium"
-                  >
-                    <Phone className="w-3.5 h-3.5 mr-1.5 text-snaiperis-red" />
-                    <span>{matchedCoach.phone}</span>
-                  </a>
-                  <a 
-                    href={`mailto:${matchedCoach.email}`}
-                    className="flex items-center text-slate-700 hover:text-snaiperis-red"
-                  >
-                    <Mail className="w-3.5 h-3.5 mr-1.5 text-snaiperis-red" />
-                    <span className="truncate">{matchedCoach.email}</span>
-                  </a>
-                </div>
-              )}
+                {matchedCoach && (
+                  <div style={{ borderTop: '1px solid var(--line)', marginTop: '20px', paddingTop: '16px', display: 'grid', gap: '8px', fontSize: '12px' }}>
+                    <a href={`tel:${matchedCoach.phone.replace(/\s+/g, '')}`} className="flex items-center gap-2 hover:text-[var(--red)]">
+                      <Phone size={14} style={{ color: 'var(--red)' }} />
+                      <span>{matchedCoach.phone}</span>
+                    </a>
+                    <a href={`mailto:${matchedCoach.email}`} className="flex items-center gap-2 hover:text-[var(--red)]">
+                      <Mail size={14} style={{ color: 'var(--red)' }} />
+                      <span className="truncate">{matchedCoach.email}</span>
+                    </a>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, X, Users, Shirt, Newspaper, MapPin, ArrowRight } from 'lucide-react';
+import { Search, X, Users, Shirt, Newspaper, MapPin, ArrowRight, ArrowUpRight } from 'lucide-react';
 import { useLocation } from 'wouter';
 import { coaches } from '../../data/coaches';
 import { merchandise } from '../../data/merchandise';
@@ -20,6 +20,11 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
+      const previous = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = previous;
+      };
     } else {
       setQuery('');
     }
@@ -59,117 +64,197 @@ export const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => 
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
-      onClick={onClose}
+      className="registration-overlay"
+      style={{ alignItems: 'flex-start', paddingTop: '10vh' }}
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div 
-        className="w-full max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-200 flex flex-col max-h-[80vh]"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Paieška svetainėje"
+        style={{
+          width: '100%',
+          maxWidth: '580px',
+          background: 'var(--paper)',
+          borderRadius: '8px',
+          border: '1px solid var(--line)',
+          boxShadow: '0 25px 80px rgba(0,0,0,0.25)',
+          overflow: 'hidden',
+          display: 'flex',
+          flexDirection: 'column',
+          maxHeight: '80vh'
+        }}
         onClick={e => e.stopPropagation()}
       >
-        <div className="relative border-b border-slate-100 flex items-center px-4 py-3">
-          <Search className="w-4 h-4 text-slate-400 mr-2.5 shrink-0" />
+        {/* Search Header */}
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', padding: '16px 20px', borderBottom: '1px solid var(--line)' }}>
+          <Search size={18} style={{ color: 'var(--muted)', marginRight: '12px', flexShrink: 0 }} />
           <input
             ref={inputRef}
             type="text"
             placeholder="Ieškoti trenerių, salių, komandų ar naujienų..."
             value={query}
             onChange={e => setQuery(e.target.value)}
-            className="w-full text-sm bg-transparent border-none focus:outline-none text-slate-900 placeholder:text-slate-400"
+            style={{
+              width: '100%',
+              fontSize: '14px',
+              border: 'none',
+              outline: 'none',
+              background: 'transparent',
+              color: 'var(--ink)'
+            }}
           />
           {query && (
             <button 
               onClick={() => setQuery('')}
-              className="text-slate-400 hover:text-slate-600 p-1 mr-2"
+              style={{ color: 'var(--muted)', padding: '4px', marginRight: '8px', cursor: 'pointer' }}
+              aria-label="Valyti"
             >
-              <X className="w-4 h-4" />
+              <X size={16} />
             </button>
           )}
-          <span className="text-[10px] text-slate-400 bg-slate-100 px-1.5 py-0.5 rounded font-mono">ESC</span>
+          <span style={{ fontSize: '10px', color: 'var(--muted)', background: '#eeeee7', padding: '3px 6px', borderRadius: '3px', fontFamily: 'monospace' }}>
+            ESC
+          </span>
         </div>
 
-        <div className="p-4 overflow-y-auto space-y-3 flex-grow">
+        {/* Results Container */}
+        <div style={{ padding: '20px', overflowY: 'auto', flexGrow: 1 }}>
           {!q ? (
-            <div className="py-6 text-center text-slate-400 text-xs">
-              Įveskite paieškos žodį (pvz. „Matulaitis“, „Centras“, „U8“)
+            <div style={{ textAlign: 'center', padding: '36px 0', color: 'var(--muted)', fontSize: '13px' }}>
+              Įveskite paieškos žodį (pvz. „Matulaitis“, „Centras“, „Darželinukai“, „U8“)
             </div>
           ) : totalResults === 0 ? (
-            <div className="py-6 text-center text-slate-500 text-xs">
+            <div style={{ textAlign: 'center', padding: '36px 0', color: 'var(--muted)', fontSize: '13px' }}>
               Pagal užklausą <strong>„{query}“</strong> nieko nerasta.
             </div>
           ) : (
-            <div className="space-y-3">
+            <div style={{ display: 'grid', gap: '20px' }}>
+              {/* Gyms */}
               {filteredGyms.length > 0 && (
                 <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center">
-                    <MapPin className="w-3 h-3 mr-1 text-snaiperis-red" />
-                    Sporto salės
-                  </div>
-                  <div className="space-y-1">
+                  <span className="tag-badge tag-badge-red" style={{ marginBottom: '8px' }}>
+                    <MapPin size={10} style={{ marginRight: '4px' }} /> Sporto salės
+                  </span>
+                  <div style={{ display: 'grid', gap: '4px', marginTop: '6px' }}>
                     {filteredGyms.map((g, idx) => (
                       <div
                         key={idx}
                         onClick={() => navigateTo('/priemimas')}
-                        className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 cursor-pointer group"
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '4px', cursor: 'pointer', transition: 'background .15s' }}
+                        className="hover:bg-[#efeee8]"
                       >
                         <div>
-                          <div className="font-semibold text-xs text-slate-900 group-hover:text-snaiperis-red">
-                            {g.name}
-                          </div>
-                          <div className="text-[11px] text-slate-500">{g.district} • {g.address}</div>
+                          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>{g.name}</div>
+                          <div style={{ fontSize: '11px', color: 'var(--muted)' }}>{g.district} · {g.address}</div>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-snaiperis-red" />
+                        <ArrowUpRight size={14} style={{ color: 'var(--red)' }} />
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
+              {/* Coaches */}
               {filteredCoaches.length > 0 && (
                 <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center">
-                    <Users className="w-3 h-3 mr-1 text-snaiperis-red" />
-                    Treneriai
-                  </div>
-                  <div className="space-y-1">
+                  <span className="tag-badge tag-badge-red" style={{ marginBottom: '8px' }}>
+                    <Users size={10} style={{ marginRight: '4px' }} /> Treneriai
+                  </span>
+                  <div style={{ display: 'grid', gap: '4px', marginTop: '6px' }}>
                     {filteredCoaches.map(c => (
                       <div
                         key={c.id}
-                        onClick={() => navigateTo('/treneriai')}
-                        className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 cursor-pointer group"
+                        onClick={() => navigateTo(`/treneriai/${c.slug}`)}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '4px', cursor: 'pointer', transition: 'background .15s' }}
+                        className="hover:bg-[#efeee8]"
                       >
-                        <div className="flex items-center space-x-2.5">
-                          <img src={c.image} alt={c.name} className="w-6 h-6 rounded-full object-cover border border-slate-200" />
+                        <div className="flex items-center gap-3">
+                          <img src={c.image} alt={c.name} style={{ width: '28px', height: '28px', borderRadius: '4px', objectFit: 'cover', objectPosition: 'top' }} />
                           <div>
-                            <div className="font-semibold text-xs text-slate-900 group-hover:text-snaiperis-red">
-                              {c.name}
-                            </div>
-                            <div className="text-[11px] text-slate-500">{c.role}</div>
+                            <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>{c.name}</div>
+                            <div style={{ fontSize: '11px', color: 'var(--muted)' }}>{c.role}</div>
                           </div>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-snaiperis-red" />
+                        <ArrowUpRight size={14} style={{ color: 'var(--red)' }} />
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
+              {/* Teams */}
+              {filteredTeams.length > 0 && (
+                <div>
+                  <span className="tag-badge tag-badge-red" style={{ marginBottom: '8px' }}>
+                    Komandos
+                  </span>
+                  <div style={{ display: 'grid', gap: '4px', marginTop: '6px' }}>
+                    {filteredTeams.map(t => (
+                      <div
+                        key={t.id}
+                        onClick={() => navigateTo(`/komandos/${t.slug}`)}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '4px', cursor: 'pointer', transition: 'background .15s' }}
+                        className="hover:bg-[#efeee8]"
+                      >
+                        <div>
+                          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>{t.name}</div>
+                          <div style={{ fontSize: '11px', color: 'var(--muted)' }}>{t.year} m. · {t.division} · Treneris: {t.coach}</div>
+                        </div>
+                        <ArrowUpRight size={14} style={{ color: 'var(--red)' }} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Merchandise */}
+              {filteredMerch.length > 0 && (
+                <div>
+                  <span className="tag-badge tag-badge-red" style={{ marginBottom: '8px' }}>
+                    <Shirt size={10} style={{ marginRight: '4px' }} /> Atributika
+                  </span>
+                  <div style={{ display: 'grid', gap: '4px', marginTop: '6px' }}>
+                    {filteredMerch.map(m => (
+                      <div
+                        key={m.id}
+                        onClick={() => navigateTo('/atributika')}
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '4px', cursor: 'pointer', transition: 'background .15s' }}
+                        className="hover:bg-[#efeee8]"
+                      >
+                        <div className="flex items-center gap-3">
+                          <img src={m.image} alt={m.name} style={{ width: '28px', height: '28px', objectFit: 'contain' }} />
+                          <div>
+                            <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>{m.name}</div>
+                            <div style={{ fontSize: '11px', color: 'var(--red)' }}>{m.price}</div>
+                          </div>
+                        </div>
+                        <ArrowUpRight size={14} style={{ color: 'var(--red)' }} />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* News */}
               {filteredNews.length > 0 && (
                 <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5 flex items-center">
-                    <Newspaper className="w-3 h-3 mr-1 text-snaiperis-red" />
-                    Naujienos
-                  </div>
-                  <div className="space-y-1">
+                  <span className="tag-badge tag-badge-red" style={{ marginBottom: '8px' }}>
+                    <Newspaper size={10} style={{ marginRight: '4px' }} /> Naujienos
+                  </span>
+                  <div style={{ display: 'grid', gap: '4px', marginTop: '6px' }}>
                     {filteredNews.map(n => (
                       <div
                         key={n.id}
                         onClick={() => navigateTo(`/naujienos/${n.slug}`)}
-                        className="flex items-center justify-between p-2 rounded-lg hover:bg-slate-50 cursor-pointer group"
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '10px 12px', borderRadius: '4px', cursor: 'pointer', transition: 'background .15s' }}
+                        className="hover:bg-[#efeee8]"
                       >
-                        <div className="font-semibold text-xs text-slate-900 group-hover:text-snaiperis-red line-clamp-1">
-                          {n.title}
+                        <div>
+                          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--ink)' }}>{n.title}</div>
+                          <div style={{ fontSize: '11px', color: 'var(--muted)' }}>{n.category} · {n.date}</div>
                         </div>
-                        <ArrowRight className="w-3.5 h-3.5 text-slate-300 group-hover:text-snaiperis-red shrink-0 ml-2" />
+                        <ArrowUpRight size={14} style={{ color: 'var(--red)' }} />
                       </div>
                     ))}
                   </div>

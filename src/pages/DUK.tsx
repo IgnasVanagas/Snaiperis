@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { faqList } from '../data/faq';
-import { HelpCircle, ChevronDown, Search, ArrowRight, Phone, Mail } from 'lucide-react';
+import { ChevronDown, Search, ArrowLeft, ArrowUpRight, Phone, Mail, X } from 'lucide-react';
 import { Link } from 'wouter';
 
 export const DUK: React.FC = () => {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
   const [search, setSearch] = useState('');
 
   const filtered = faqList.filter(f => 
@@ -13,73 +12,104 @@ export const DUK: React.FC = () => {
   );
 
   return (
-    <div className="pt-24 sm:pt-28 pb-20 space-y-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-8">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <h1 className="text-3xl sm:text-5xl font-black font-display text-slate-900 tracking-tight">
-            Dažniausiai užduodami klausimai
-          </h1>
-          <p className="text-slate-600 text-xs sm:text-sm">
-            Atsakymai į klausimus apie treniruočių pradžią, kainas, NVŠ krepšelį, sveikatos pažymas ir aprangas.
-          </p>
-
-          <div className="max-w-md mx-auto pt-2 relative">
-            <Search className="w-5 h-5 text-slate-400 absolute left-3.5 top-3.5" />
-            <input
-              type="text"
-              placeholder="Ieškoti klausimo ar atsakymo..."
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200 rounded-2xl text-xs sm:text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-snaiperis-red"
-            />
-          </div>
+    <div className="subpage">
+      <div className="site-container" style={{ paddingTop: '124px', paddingBottom: '70px' }}>
+        <div style={{ marginBottom: '24px' }}>
+          <Link href="/tevams" className="text-link" style={{ fontSize: '12px' }}>
+            <ArrowLeft size={16} /> Tėvų portalas
+          </Link>
         </div>
 
-        {/* FAQ Accordion */}
-        <div className="space-y-3">
-          {filtered.map((item, idx) => (
-            <div
-              key={idx}
-              className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden transition-all"
-            >
-              <button
-                onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-                className="w-full px-6 py-4 flex items-center justify-between text-left font-bold text-slate-900 hover:text-snaiperis-red transition-colors text-sm sm:text-base"
-              >
-                <span>{item.q}</span>
-                <ChevronDown
-                  className={`w-5 h-5 text-slate-400 shrink-0 ml-3 transition-transform duration-200 ${
-                    openIndex === idx ? 'rotate-180 text-snaiperis-red' : ''
-                  }`}
-                />
-              </button>
+        <header className="page-header" style={{ paddingTop: '0', marginBottom: '48px' }}>
+          <div className="page-header-content">
+            <span className="eyebrow"><span className="status-dot" /> Tėvams ramiau · Dažniausi klausimai ir atsakymai</span>
+            <h1>Dažniausi klausimai.<br /><span>Viskas, ką verta žinoti.</span></h1>
+            <p className="page-header-desc">
+              Atsakymai į klausimus apie treniruočių pradžią, kainas, NVŠ krepšelį, sveikatos pažymas, sales ir aprangas.
+            </p>
 
-              {openIndex === idx && (
-                <div className="px-6 pb-5 pt-1 text-slate-600 text-xs sm:text-sm leading-relaxed border-t border-slate-100 bg-slate-50/50">
-                  {item.a}
-                </div>
+            <div className="search-wrapper" style={{ marginTop: '26px' }}>
+              <Search size={16} />
+              <input
+                type="text"
+                placeholder="Ieškoti klausimo ar atsakymo..."
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+              />
+              {search && (
+                <button 
+                  onClick={() => setSearch('')}
+                  aria-label="Valyti paiešką"
+                  style={{ position: 'absolute', right: '14px', top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }}
+                >
+                  <X size={15} />
+                </button>
               )}
             </div>
-          ))}
+          </div>
+        </header>
+
+        {/* FAQ List using Home page native details/summary styles */}
+        <div style={{ maxWidth: '880px', marginBottom: '54px' }}>
+          <div className="faq-list">
+            {filtered.map((faq, idx) => (
+              <details key={idx} open={idx === 0 && !search}>
+                <summary>
+                  {faq.q}
+                  <ChevronDown size={18} />
+                </summary>
+                <p>{faq.a}</p>
+              </details>
+            ))}
+          </div>
+
+          {filtered.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--muted)', fontSize: '14px' }}>
+              Pagal užklausą „{search}“ klausimų nerasta. Susisiekite su mumis tiesiogiai!
+            </div>
+          )}
         </div>
 
-        {/* Still have questions? */}
-        <div className="bg-slate-50 border border-slate-200/80 rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
-          <div>
-            <h3 className="text-base font-bold text-slate-900">Neradote atsakymo į savo klausimą?</h3>
-            <p className="text-xs sm:text-sm text-slate-500">Mūsų administracija mielai atsakys į visus rūpimus klausimus.</p>
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <a href="tel:+37067246656" className="px-4 py-2.5 bg-white border border-slate-200 text-slate-900 font-semibold rounded-xl text-xs hover:border-snaiperis-red/40 shadow-sm flex items-center space-x-1.5 transition-colors">
-              <Phone className="w-3.5 h-3.5 text-snaiperis-red" />
-              <span>+370 672 46 656</span>
-            </a>
-            <Link href="/kontaktai" className="px-5 py-2.5 bg-snaiperis-red text-white font-semibold rounded-xl text-xs hover:bg-snaiperis-red-600 transition-colors shadow-sm">
-              Rašyti žinutę
-            </Link>
+        {/* Still have questions? Help Card */}
+        <div style={{ maxWidth: '880px' }}>
+          <div className="editorial-card-warm" style={{ padding: '36px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '24px' }}>
+            <div>
+              <span className="eyebrow"><span className="status-dot" /> Neradote atsakymo?</span>
+              <h2 style={{ fontSize: '24px', marginTop: '8px' }}>Mielai atsakysime į Jūsų klausimą.</h2>
+              <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '4px' }}>
+                Susisiekite telefonu arba parašykite tiesiogiai administracijai.
+              </p>
+            </div>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+              <a href="tel:+37067246656" className="button-primary" style={{ gap: '10px', minHeight: '46px', padding: '12px 20px', fontSize: '12px' }}>
+                <Phone size={15} /> +370 672 46 656
+              </a>
+              <Link href="/kontaktai" className="filter-tab active flex items-center gap-2" style={{ textDecoration: 'none', padding: '12px 20px', fontSize: '12px' }}>
+                <Mail size={15} /> Rašyti žinutę
+              </Link>
+            </div>
           </div>
         </div>
+
+        {/* Closing CTA */}
+        <section className="closing-section" style={{ marginTop: '70px' }}>
+          <div className="closing-card">
+            <div className="court-lines" aria-hidden="true" />
+            <div>
+              <span className="eyebrow">Pradėkime šiandien</span>
+              <h2>Geriausias būdas sužinoti –<br />išbandyti treniruotę.</h2>
+              <p>Pirmoji bandomoji treniruotė nieko nekainuoja ir niekuo neįpareigoja.</p>
+            </div>
+            <div className="closing-actions">
+              <Link href="/priemimas" className="button-light">
+                Rasti treniruočių salę <ArrowUpRight size={18} />
+              </Link>
+              <a href="tel:+37067246656">
+                <Phone size={15} /> +370 672 46 656
+              </a>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );

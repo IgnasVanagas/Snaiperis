@@ -1,92 +1,111 @@
 import React from 'react';
+import { ArrowLeft, ArrowUpRight, Check, Phone, FileText } from 'lucide-react';
 import { Link } from 'wouter';
-import { HeartHandshake, CheckCircle2, AlertCircle, ArrowLeft, Mail, Phone, FileText } from 'lucide-react';
 
 export const Krepselis: React.FC = () => {
   return (
-    <div className="pt-24 sm:pt-28 pb-20 space-y-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-8">
-        <Link 
-          href="/tevams" 
-          className="inline-flex items-center space-x-2 text-xs font-bold text-slate-500 hover:text-snaiperis-red transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Atgal į tėvų portalą</span>
-        </Link>
-
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-black font-display text-slate-900 tracking-tight">
-            Neformalaus ugdymo krepšelis (NVŠ)
-          </h1>
-          <p className="text-slate-600 text-xs sm:text-sm mt-2">
-            VšĮ Krepšinio Akademija „Snaiperis“ yra akredituota neformalaus ugdymo įstaiga, suteikianti galimybę pasinaudoti NVŠ krepšeliu.
-          </p>
+    <div className="subpage">
+      <div className="site-container" style={{ paddingTop: '124px', paddingBottom: '70px' }}>
+        <div style={{ marginBottom: '24px' }}>
+          <Link href="/tevams" className="text-link" style={{ fontSize: '12px' }}>
+            <ArrowLeft size={16} /> Tėvų portalas
+          </Link>
         </div>
 
-        {/* Subsidy Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="text-3xl sm:text-4xl font-black font-display text-slate-900">
-                15 € <span className="text-sm font-semibold text-slate-500">/ mėn.</span>
-              </div>
-              <span className="bg-blue-50 text-blue-700 text-xs font-bold px-3 py-1 rounded-full border border-blue-100">
-                1–8 klasėms
-              </span>
-            </div>
-            <p className="text-xs sm:text-sm text-slate-600">
-              Vaikams su specialiaisiais ugdymosi poreikiais (SUP) kompensuojama <strong>30 € / mėn.</strong>
+        <header className="page-header" style={{ paddingTop: '0', marginBottom: '48px' }}>
+          <div className="page-header-content">
+            <span className="eyebrow"><span className="status-dot" /> Savivaldybės parama · Kauno m. ir Kauno r.</span>
+            <h1>Neformalaus ugdymo krepšelis.<br /><span>Kompensacija vaiko treniruotėms.</span></h1>
+            <p className="page-header-desc">
+              VšĮ Krepšinio Akademija „Snaiperis“ yra oficialiai akredituota neformalaus švietimo įstaiga. Kiekvienas bendrojo ugdymo moksleivis gali gauti 15–50 € mėnesinę savivaldybės kompensaciją.
             </p>
+            <div className="hero-reassurance" style={{ marginTop: '22px' }}>
+              <Check size={15} /> Akredituotos programos Kauno mieste ir rajone
+              <span /> Automatinis sąskaitos sumažinimas
+              <span /> Padidintas finansavimas vaikams su SUP
+            </div>
+          </div>
+        </header>
+
+        <div className="space-y-8" style={{ maxWidth: '880px' }}>
+          {/* Subsidy Amount Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <article className="editorial-card" style={{ padding: '32px' }}>
+              <div className="flex items-center justify-between mb-3">
+                <span className="tag-badge tag-badge-red">1–8 klasėms</span>
+                <span style={{ fontSize: '11px', color: 'var(--muted)' }}>Kauno m. ir r.</span>
+              </div>
+              <div style={{ fontSize: '38px', fontFamily: "'Outfit', sans-serif", fontWeight: 500, color: 'var(--ink)' }}>
+                15 € <span style={{ fontSize: '14px', color: 'var(--muted)', fontWeight: 400 }}>/ mėn.</span>
+              </div>
+              <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.8', marginTop: '12px', borderTop: '1px solid var(--line)', paddingTop: '12px' }}>
+                Vaikams su specialiaisiais ugdymosi poreikiais (SUP) skiriama <strong>30 € / mėn.</strong> kompensacija.
+              </p>
+            </article>
+
+            <article className="editorial-card" style={{ padding: '32px' }}>
+              <div className="flex items-center justify-between mb-3">
+                <span className="tag-badge tag-badge-red">9–12 klasėms</span>
+                <span style={{ fontSize: '11px', color: 'var(--muted)' }}>Kauno m. ir r.</span>
+              </div>
+              <div style={{ fontSize: '38px', fontFamily: "'Outfit', sans-serif", fontWeight: 500, color: 'var(--ink)' }}>
+                25 € <span style={{ fontSize: '14px', color: 'var(--muted)', fontWeight: 400 }}>/ mėn.</span>
+              </div>
+              <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.8', marginTop: '12px', borderTop: '1px solid var(--line)', paddingTop: '12px' }}>
+                Vaikams su specialiaisiais ugdymosi poreikiais (SUP) skiriama <strong>50 € / mėn.</strong> kompensacija.
+              </p>
+            </article>
           </div>
 
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-3">
-            <div className="flex items-center justify-between">
-              <div className="text-3xl sm:text-4xl font-black font-display text-slate-900">
-                25 € <span className="text-sm font-semibold text-slate-500">/ mėn.</span>
-              </div>
-              <span className="bg-red-50 text-snaiperis-red text-xs font-bold px-3 py-1 rounded-full border border-red-100">
-                9–12 klasėms
-              </span>
+          {/* Svarbiausios taisyklės */}
+          <article className="editorial-card" style={{ padding: '32px' }}>
+            <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>Svarbiausios NVŠ taisyklės</h2>
+            <div style={{ display: 'grid', gap: '14px' }}>
+              {[
+                { title: 'Tik bendrojo ugdymo mokiniams:', desc: 'Krepšelio kompensacija taikoma moksleiviams, besimokantiems 1–12 klasėse.' },
+                { title: 'Tik vienas būrelis:', desc: 'NVŠ lėšomis mokslo metais gali būti kompensuojamas tik vienas pasirinktas vaiko lankomas neformalus užsiėmimas.' },
+                { title: 'Teritorinis galiojimas:', desc: 'Programos akredituotos ir galioja Kauno miesto bei Kauno rajono savivaldybėse deklaruotiems vaikams.' },
+                { title: 'Automatinis sumažinimas:', desc: 'Savivaldybės registre patvirtinus sutartį, mėnesinė sąskaita Jums siunčiama jau su pritaikyta nuolaida.' }
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-3 text-xs sm:text-sm" style={{ color: 'var(--muted)', lineHeight: '1.7' }}>
+                  <Check size={16} style={{ color: 'var(--red)', flexShrink: 0, marginTop: '2px' }} />
+                  <span><strong style={{ color: 'var(--ink)' }}>{item.title}</strong> {item.desc}</span>
+                </div>
+              ))}
             </div>
-            <p className="text-xs sm:text-sm text-slate-600">
-              Vaikams su specialiaisiais ugdymosi poreikiais (SUP) kompensuojama <strong>50 € / mėn.</strong>
+          </article>
+
+          {/* Contract Signing Box */}
+          <article className="editorial-card-warm" style={{ padding: '28px' }}>
+            <div className="flex items-center gap-3 mb-2">
+              <FileText size={18} style={{ color: 'var(--red)' }} />
+              <h3 style={{ fontSize: '17px', margin: 0 }}>Kaip pasirašyti NVŠ sutartį?</h3>
+            </div>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.8', margin: 0 }}>
+              Sutartys pasirašomos mokslo metų pradžioje (rugsėjo–spalio mėn.) arba prisijungus prie treniruočių grupės. Sutartį galima pasirašyti el. parašu arba pateikti pasirašytą egzempliorių savo treneriui ar atsiųsti el. paštu <strong style={{ color: 'var(--ink)' }}>info@kasnaiperis.lt</strong>.
             </p>
+          </article>
+        </div>
+
+        {/* Closing CTA */}
+        <section className="closing-section" style={{ marginTop: '70px' }}>
+          <div className="closing-card">
+            <div className="court-lines" aria-hidden="true" />
+            <div>
+              <span className="eyebrow">Pagalba dėl sutarčių</span>
+              <h2>Reikia pagalbos<br />sudarant NVŠ sutartį?</h2>
+              <p>Mūsų administracija patikrins registrą ir padės sutvarkyti dokumentus.</p>
+            </div>
+            <div className="closing-actions">
+              <a href="tel:+37067246656" className="button-light">
+                <Phone size={15} /> +370 672 46 656
+              </a>
+              <Link href="/priemimas">
+                Treniruočių salės <ArrowUpRight size={16} />
+              </Link>
+            </div>
           </div>
-        </div>
-
-        {/* Key rules */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-4">
-          <h3 className="text-lg font-bold text-slate-900">Svarbiausios NVŠ taisyklės</h3>
-          <ul className="space-y-3 text-xs sm:text-sm text-slate-600">
-            <li className="flex items-start space-x-2.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-              <span><strong>Tik bendrojo ugdymo mokiniams:</strong> NVŠ taikomas 1–12 klasių mokiniams.</span>
-            </li>
-            <li className="flex items-start space-x-2.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-              <span><strong>Tik vienas būrelis:</strong> NVŠ lėšomis gali būti kompensuojamas tik <strong>vienas</strong> pasirinktas vaiko lankomas neformalus užsiėmimas.</span>
-            </li>
-            <li className="flex items-start space-x-2.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-              <span><strong>Galioja:</strong> Kauno miesto ir Kauno rajono savivaldybėse.</span>
-            </li>
-            <li className="flex items-start space-x-2.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
-              <span><strong>Automatinis sumažinimas:</strong> Patvirtinus sutartį savivaldybės registre, sąskaita Jums bus atsiunčiama jau su pritaikyta nuolaida.</span>
-            </li>
-          </ul>
-        </div>
-
-        {/* Contract signing */}
-        <div className="bg-slate-50 rounded-3xl p-6 sm:p-8 border border-slate-200 space-y-3">
-          <h3 className="text-base font-bold text-slate-900 flex items-center">
-            <FileText className="w-5 h-5 mr-2 text-snaiperis-red" />
-            Kaip pasirašyti NVŠ sutartį?
-          </h3>
-          <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-            Sutartys pasirašomos mokslo metų pradžioje arba prisijungus prie grupės. Sutartis galima pasirašyti el. būdu arba pateikti pasirašytus egzempliorius treneriui arba atsiųsti el. paštu <strong>info@kasnaiperis.lt</strong>.
-          </p>
-        </div>
+        </section>
       </div>
     </div>
   );

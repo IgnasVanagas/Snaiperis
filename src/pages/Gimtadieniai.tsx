@@ -1,99 +1,121 @@
 import React from 'react';
+import { ArrowLeft, ArrowUpRight, Check, Phone } from 'lucide-react';
 import { Link } from 'wouter';
-import { Sparkles, Check, ArrowLeft, Phone, Mail, Flame, Trophy } from 'lucide-react';
 import { academyData } from '../data/academyData';
 
 interface GimtadieniaiProps {
   onOpenRegister: () => void;
 }
 
-export const Gimtadieniai: React.FC<GimtadieniaiProps> = ({ onOpenRegister }) => {
+export const Gimtadieniai: React.FC<GimtadieniaiProps> = () => {
   return (
-    <div className="pt-24 sm:pt-28 pb-20 space-y-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-8">
-        <Link 
-          href="/tevams" 
-          className="inline-flex items-center space-x-2 text-xs font-bold text-slate-500 hover:text-snaiperis-red transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Atgal į tėvų portalą</span>
-        </Link>
-
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-3">
-          <h1 className="text-3xl sm:text-4xl font-black font-display text-slate-900 tracking-tight">
-            Krepšinio gimtadienis
-          </h1>
-          <p className="text-slate-600 text-xs sm:text-sm">
-            Nepamirštama šventė su profesionaliu krepšinio treneriu, linksmais žaidimais ir rungtynėmis Kaune.
-          </p>
+    <div className="subpage">
+      <div className="site-container" style={{ paddingTop: '124px', paddingBottom: '70px' }}>
+        <div style={{ marginBottom: '24px' }}>
+          <Link href="/tevams" className="text-link" style={{ fontSize: '12px' }}>
+            <ArrowLeft size={16} /> Tėvų portalas
+          </Link>
         </div>
 
-        {/* Packages Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-          {academyData.birthdays.map((pkg, idx) => (
-            <div
-              key={idx}
-              className={`rounded-3xl p-6 sm:p-8 border flex flex-col justify-between transition-all ${
-                idx === 1
-                  ? 'bg-snaiperis-dark text-white border-snaiperis-red/30 shadow-xl relative'
-                  : 'bg-white text-slate-900 border-slate-200 shadow-sm'
-              }`}
-            >
-              {idx === 1 && (
-                <span className="absolute -top-3 right-8 bg-snaiperis-red text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-sm">
-                  Populiariausias
-                </span>
-              )}
+        <header className="page-header" style={{ paddingTop: '0', marginBottom: '48px' }}>
+          <div className="page-header-content">
+            <span className="eyebrow"><span className="status-dot" /> Šventės aikštelėje · Aktyvu ir linksma</span>
+            <h1>Krepšinio gimtadienis.<br /><span>Nepamirštama šventė vaikams.</span></h1>
+            <p className="page-header-desc">
+              Švęskite vaiko gimtadienį krepšinio aikštelėje su profesionaliu akademijos treneriu! Estafetės, metimų konkursai, draugiškos rungtynės ir diplomai visiems svečiams.
+            </p>
+            <div className="hero-reassurance" style={{ marginTop: '22px' }}>
+              <Check size={15} /> Profesionalus treneris ir visa krepšinio įranga
+              <span /> Galite atsinešti savo tortą ir vaišes
+              <span /> Salės įvairiuose Kauno mikrorajonuose
+            </div>
+          </div>
+        </header>
 
-              <div className="space-y-4">
-                <div className="space-y-1">
-                  <h3 className="text-xl sm:text-2xl font-bold font-display">
+        <div className="space-y-8" style={{ maxWidth: '880px' }}>
+          {/* 2 Birthday Packages */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {academyData.birthdays.map((pkg, idx) => (
+              <div
+                key={idx}
+                className={idx === 1 ? 'editorial-card-dark' : 'editorial-card'}
+                style={{ padding: '36px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+              >
+                {idx === 1 && <div className="court-lines" aria-hidden="true" />}
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className={idx === 1 ? 'tag-badge' : 'tag-badge tag-badge-red'} style={idx === 1 ? { background: 'rgba(255,255,255,0.15)', color: '#fff' } : {}}>
+                      {pkg.duration}
+                    </span>
+                    {idx === 1 && (
+                      <span className="tag-badge tag-badge-red">Populiariausias</span>
+                    )}
+                  </div>
+
+                  <h2 style={{ fontSize: '24px', marginBlock: '8px 4px', color: idx === 1 ? '#fff' : 'var(--ink)' }}>
                     {pkg.title}
-                  </h3>
-                  <div className={`text-xs font-semibold ${idx === 1 ? 'text-amber-200' : 'text-slate-500'}`}>
-                    {pkg.duration} • {pkg.kids}
+                  </h2>
+                  <span style={{ fontSize: '12px', color: idx === 1 ? '#ffdfd8' : 'var(--muted)' }}>
+                    {pkg.kids}
+                  </span>
+
+                  <div style={{ fontSize: '38px', fontFamily: "'Outfit', sans-serif", fontWeight: 500, marginBlock: '16px 20px', color: idx === 1 ? '#fff' : 'var(--red)' }}>
+                    {pkg.price}
+                  </div>
+
+                  <div style={{ borderTop: idx === 1 ? '1px solid rgba(255,255,255,0.15)' : '1px solid var(--line)', paddingTop: '18px', display: 'grid', gap: '10px' }}>
+                    {pkg.features.map((f, i) => (
+                      <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm" style={{ color: idx === 1 ? '#ffe6df' : 'var(--muted)', lineHeight: '1.6' }}>
+                        <Check size={15} style={{ color: 'var(--red)', flexShrink: 0, marginTop: '2px' }} />
+                        <span>{f}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
 
-                <div className={`text-3xl sm:text-4xl font-black font-display ${idx === 1 ? 'text-white' : 'text-snaiperis-red'}`}>
-                  {pkg.price}
-                </div>
-
-                <div className="pt-4 border-t border-slate-200/20 space-y-2.5">
-                  {pkg.features.map((f, i) => (
-                    <div key={i} className="flex items-start text-xs sm:text-sm">
-                      <Check className={`w-4 h-4 mr-2 shrink-0 ${idx === 1 ? 'text-snaiperis-gold' : 'text-emerald-500'}`} />
-                      <span className={idx === 1 ? 'text-slate-200' : 'text-slate-700'}>{f}</span>
-                    </div>
-                  ))}
+                <div style={{ position: 'relative', zIndex: 1, marginTop: '28px' }}>
+                  <a
+                    href="tel:+37067246656"
+                    className={idx === 1 ? 'button-light' : 'button-primary'}
+                    style={{ width: '100%', minHeight: '48px', textDecoration: 'none' }}
+                  >
+                    <Phone size={15} /> Rezervuoti laiką
+                  </a>
                 </div>
               </div>
+            ))}
+          </div>
 
-              <div className="pt-6 sm:pt-8">
-                <a
-                  href="tel:+37067246656"
-                  className={`w-full py-3 rounded-xl font-bold text-xs uppercase tracking-wider transition-all flex items-center justify-center space-x-2 ${
-                    idx === 1
-                      ? 'bg-snaiperis-red hover:bg-snaiperis-red-600 text-white shadow-md'
-                      : 'bg-slate-900 hover:bg-snaiperis-red text-white'
-                  }`}
-                >
-                  <Phone className="w-4 h-4" />
-                  <span>Rezervuoti (+370 672 46 656)</span>
-                </a>
-              </div>
+          {/* Useful Notes */}
+          <article className="editorial-card-warm" style={{ padding: '28px' }}>
+            <h3 style={{ fontSize: '17px', marginBottom: '10px' }}>Svarbi informacija tėveliams:</h3>
+            <div style={{ display: 'grid', gap: '8px', fontSize: '13px', color: 'var(--muted)', lineHeight: '1.8' }}>
+              <div>• Galite atsinešti savo tortą, užkandžius ir gaiviuosius gėrimus.</div>
+              <div>• Visiems šventės dalyviams būtina turėti švarią sportinę salės avalynę.</div>
+              <div>• Laikas ir konkreti salė derinami iš anksto pagal Jūsų pasirinktą datą.</div>
             </div>
-          ))}
+          </article>
         </div>
 
-        {/* What to bring */}
-        <div className="bg-slate-50 rounded-3xl p-6 sm:p-8 border border-slate-200 text-xs sm:text-sm text-slate-600 space-y-2">
-          <h4 className="font-bold text-slate-900 text-base">Papildoma informacija tėveliams:</h4>
-          <p>• Galite atsinešti savo tortą, užkandžius ir gėrimus.</p>
-          <p>• Visiems vaikams būtina turėti švarią sportinę avalynę bėgiojimui salėje.</p>
-          <p>• Laikas derinamas iš anksto pagal pageidaujamą salę ir datą.</p>
-        </div>
+        {/* Closing CTA */}
+        <section className="closing-section" style={{ marginTop: '70px' }}>
+          <div className="closing-card">
+            <div className="court-lines" aria-hidden="true" />
+            <div>
+              <span className="eyebrow">Švęskime kartu</span>
+              <h2>Turite klausimų<br />dėl gimtadienio šventės?</h2>
+              <p>Paskambinkite ir suderinsime patogiausią laiką, salę bei trenerį.</p>
+            </div>
+            <div className="closing-actions">
+              <a href="tel:+37067246656" className="button-light">
+                <Phone size={15} /> +370 672 46 656
+              </a>
+              <Link href="/priemimas">
+                Visos salės <ArrowUpRight size={16} />
+              </Link>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );

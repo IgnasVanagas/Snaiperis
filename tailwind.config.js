@@ -8,17 +8,30 @@ export default {
   theme: {
     extend: {
       colors: {
+        slate: {
+          50: '#f8f7f4',
+          100: '#eeefe8',
+          200: '#dfe2d8',
+          300: '#cbd0c3',
+          400: '#8f9789',
+          500: '#6b7465',
+          600: '#57604f',
+          700: '#414939',
+          800: '#2d342a',
+          900: '#202720',
+          950: '#171d17',
+        },
         snaiperis: {
           red: {
-            DEFAULT: '#ec1f26',
+            DEFAULT: '#c62d28',
             50: '#fef2f2',
             100: '#fee2e2',
             200: '#fecaca',
             300: '#fca5a5',
             400: '#f87171',
-            500: '#ec1f26',
-            600: '#dc141b',
-            700: '#b91016',
+            500: '#c62d28',
+            600: '#ad2622',
+            700: '#94221f',
             800: '#761013',
             900: '#450a0c',
             950: '#280507',
@@ -54,7 +67,7 @@ export default {
       },
       fontFamily: {
         sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
-        display: ['Plus Jakarta Sans', 'Outfit', 'sans-serif'],
+        display: ['Outfit', 'Plus Jakarta Sans', 'sans-serif'],
       },
       boxShadow: {
         'subtle': '0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05)',

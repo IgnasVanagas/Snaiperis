@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CreditCard, Copy, Check, AlertCircle, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { Copy, Check, ArrowLeft, ArrowUpRight, Phone } from 'lucide-react';
 import { Link } from 'wouter';
 import { academyData } from '../data/academyData';
 
@@ -14,114 +14,125 @@ export const MokejimuInformacija: React.FC = () => {
   };
 
   return (
-    <div className="pt-24 sm:pt-28 pb-20 space-y-12">
-      <div className="max-w-4xl mx-auto px-4 sm:px-8 space-y-8">
-        <Link 
-          href="/tevams" 
-          className="inline-flex items-center space-x-2 text-xs font-bold text-slate-500 hover:text-snaiperis-red transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          <span>Atgal į tėvų portalą</span>
-        </Link>
-
-        {/* Header */}
-        <div>
-          <h1 className="text-3xl sm:text-4xl font-black font-display text-slate-900 tracking-tight">
-            Mokėjimų informacija
-          </h1>
-          <p className="text-slate-600 text-xs sm:text-sm mt-2">
-            Kiekvieną mėnesį Jums bus atsiųsta el. sąskaita už vaiko lankytas krepšinio treniruotes. Sąskaitą prašome apmokėti iki paskutinės einamojo mėnesio dienos.
-          </p>
+    <div className="subpage">
+      <div className="site-container" style={{ paddingTop: '124px', paddingBottom: '70px' }}>
+        <div style={{ marginBottom: '24px' }}>
+          <Link href="/tevams" className="text-link" style={{ fontSize: '12px' }}>
+            <ArrowLeft size={16} /> Tėvų portalas
+          </Link>
         </div>
 
-        {/* Bank Requisites Card */}
-        <div className="bg-snaiperis-dark text-white rounded-3xl p-6 sm:p-8 shadow-xl border border-white/10 space-y-6">
-          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 rounded-xl bg-snaiperis-red flex items-center justify-center font-bold">
-                <CreditCard className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <div className="text-[11px] text-slate-400 uppercase tracking-wider">Banko rekvizitai</div>
-                <div className="text-sm sm:text-base font-bold text-white">{p.receiver}</div>
-              </div>
-            </div>
-            <span className="text-xs font-mono bg-white/10 px-3 py-1 rounded-full text-slate-300">
-              {p.bank}
-            </span>
+        <header className="page-header" style={{ paddingTop: '0', marginBottom: '48px' }}>
+          <div className="page-header-content">
+            <span className="eyebrow"><span className="status-dot" /> Finansai ir rekvizitai · Mėnesiniai mokesčiai</span>
+            <h1>Mokėjimų informacija.<br /><span>Aiškus ir patogus atsiskaitymas.</span></h1>
+            <p className="page-header-desc">
+              Kiekvieną mėnesį el. paštu gausite sąskaitą faktūrą už vaiko lankytas treniruotes. Sąskaitas prašome apmokėti iki paskutinės einamojo mėnesio dienos.
+            </p>
           </div>
+        </header>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
-            <div>
-              <span className="text-slate-400 block mb-1">Gavėjo pavadinimas:</span>
-              <span className="font-bold text-sm text-white">{p.receiver}</span>
-            </div>
-            <div>
-              <span className="text-slate-400 block mb-1">Įmonės kodas:</span>
-              <span className="font-bold text-sm text-white font-mono">{p.companyCode}</span>
-            </div>
-          </div>
-
-          {/* Copyable IBAN */}
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-            <div>
-              <span className="text-[11px] text-slate-400 block uppercase tracking-wider">
-                Banko sąskaitos numeris (IBAN):
-              </span>
-              <span className="text-lg sm:text-xl font-mono font-black text-snaiperis-gold tracking-wider">
-                {p.iban}
-              </span>
-            </div>
-            <button
-              onClick={copyIban}
-              className={`px-4 py-2.5 rounded-xl font-bold text-xs flex items-center space-x-1.5 transition-all shrink-0 ${
-                copied ? 'bg-emerald-500 text-white' : 'bg-white text-slate-900 hover:bg-slate-100'
-              }`}
-            >
-              {copied ? (
-                <>
-                  <Check className="w-4 h-4" />
-                  <span>Nukopijuota!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-4 h-4 text-snaiperis-red" />
-                  <span>Kopijuoti IBAN</span>
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Payment reference example */}
-          <div className="bg-amber-500/10 border border-amber-500/30 rounded-2xl p-4 text-xs space-y-1">
-            <span className="font-bold text-amber-400 uppercase tracking-wider block">
-              Mokėjimo paskirties pavyzdys:
-            </span>
-            <div className="font-mono text-white text-xs sm:text-sm bg-black/40 p-2.5 rounded-lg border border-white/5">
-              {p.purposeExample}
-            </div>
-            <span className="text-[11px] text-slate-300 block pt-1">
-              * Būtinai nurodykite vaiko vardą, pavardę, salę ir sąskaitos numerį, kad mokėjimas būtų automatiškai užskaitytas sistemoje.
-            </span>
-          </div>
-        </div>
-
-        {/* Terms & Rules */}
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200/80 shadow-sm space-y-4">
-          <h2 className="text-lg sm:text-xl font-bold text-slate-900">
-            Mokėjimo tvarka ir sąlygos
-          </h2>
-          <div className="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
-            {p.terms.map((term, i) => (
-              <div key={i} className="flex items-start space-x-3">
-                <span className="w-6 h-6 rounded-full bg-red-50 text-snaiperis-red font-bold text-xs flex items-center justify-center shrink-0 mt-0.5">
-                  {i + 1}
+        <div className="space-y-8" style={{ maxWidth: '880px' }}>
+          {/* Bank Requisites Dark Card */}
+          <div className="editorial-card-dark" style={{ padding: '36px' }}>
+            <div className="court-lines" aria-hidden="true" />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <div className="flex items-center justify-between pb-4 border-b border-white/10">
+                <div>
+                  <span className="eyebrow" style={{ color: '#ffdfd8' }}>Oficialūs rekvizitai</span>
+                  <h2 style={{ fontSize: '22px', marginTop: '6px', color: '#fff' }}>{p.receiver}</h2>
+                </div>
+                <span className="tag-badge" style={{ background: 'rgba(255,255,255,0.15)', color: '#fff', fontSize: '11px' }}>
+                  {p.bank}
                 </span>
-                <span>{term}</span>
               </div>
-            ))}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6 text-xs" style={{ color: '#ffe6df' }}>
+                <div>
+                  <span style={{ color: '#d4dbd0', display: 'block', marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '.06em', fontSize: '10px' }}>
+                    Gavėjo pavadinimas:
+                  </span>
+                  <strong style={{ fontSize: '14px', color: '#fff' }}>{p.receiver}</strong>
+                </div>
+                <div>
+                  <span style={{ color: '#d4dbd0', display: 'block', marginBottom: '2px', textTransform: 'uppercase', letterSpacing: '.06em', fontSize: '10px' }}>
+                    Įmonės kodas:
+                  </span>
+                  <strong style={{ fontSize: '14px', color: '#fff', fontFamily: 'monospace' }}>{p.companyCode}</strong>
+                </div>
+              </div>
+
+              {/* IBAN Copy Box */}
+              <div style={{ background: 'rgba(255, 255, 255, 0.07)', border: '1px solid rgba(255, 255, 255, 0.15)', borderRadius: '4px', padding: '20px', marginTop: '24px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: '16px' }}>
+                <div>
+                  <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '.06em', color: '#d4dbd0', display: 'block', marginBottom: '4px' }}>
+                    Banko sąskaitos numeris (IBAN):
+                  </span>
+                  <div style={{ fontSize: '22px', fontFamily: 'monospace', fontWeight: 600, color: '#fff', letterSpacing: '.04em' }}>
+                    {p.iban}
+                  </div>
+                </div>
+
+                <button
+                  onClick={copyIban}
+                  className="button-light"
+                  style={{ gap: '8px', minHeight: '42px', padding: '10px 18px', fontSize: '11px' }}
+                >
+                  {copied ? <Check size={15} style={{ color: 'var(--red)' }} /> : <Copy size={15} />}
+                  <span>{copied ? 'IBAN nukopijuotas!' : 'Kopijuoti IBAN'}</span>
+                </button>
+              </div>
+
+              {/* Payment Purpose Example */}
+              <div style={{ marginTop: '20px', padding: '18px', background: 'rgba(20, 34, 24, 0.4)', borderRadius: '4px', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                <span style={{ fontSize: '10px', textTransform: 'uppercase', letterSpacing: '.06em', color: '#ffdfd8', display: 'block', marginBottom: '6px', fontWeight: 600 }}>
+                  Mokėjimo paskirties pavyzdys:
+                </span>
+                <div style={{ fontFamily: 'monospace', fontSize: '13px', color: '#fff', background: 'rgba(0,0,0,0.3)', padding: '10px 14px', borderRadius: '3px' }}>
+                  {p.purposeExample}
+                </div>
+                <span style={{ fontSize: '11px', color: '#d4dbd0', display: 'block', marginTop: '8px', lineHeight: '1.6' }}>
+                  * Nurodykite vaiko vardą, pavardę, salę ir sąskaitos numerį, kad mokėjimas būtų automatiškai susietas su Jūsų paskyra.
+                </span>
+              </div>
+            </div>
           </div>
+
+          {/* Terms & Rules */}
+          <article className="editorial-card" style={{ padding: '32px' }}>
+            <h2 style={{ fontSize: '20px', marginBottom: '16px' }}>Mokėjimo tvarka ir sąlygos</h2>
+            <div style={{ display: 'grid', gap: '14px' }}>
+              {p.terms.map((term, i) => (
+                <div key={i} className="flex items-start gap-3 text-xs sm:text-sm" style={{ color: 'var(--muted)', lineHeight: '1.7' }}>
+                  <span style={{ fontSize: '12px', color: 'var(--red)', fontFamily: "'Outfit', sans-serif", fontWeight: 600, flexShrink: 0, marginTop: '2px' }}>
+                    0{i + 1}
+                  </span>
+                  <span>{term}</span>
+                </div>
+              ))}
+            </div>
+          </article>
         </div>
+
+        {/* Closing CTA */}
+        <section className="closing-section" style={{ marginTop: '70px' }}>
+          <div className="closing-card">
+            <div className="court-lines" aria-hidden="true" />
+            <div>
+              <span className="eyebrow">Pagalba tėveliams</span>
+              <h2>Turite klausimų<br />dėl sąskaitos ar NVŠ?</h2>
+              <p>Mūsų buhalterija ir administracija mielai atsakys į visus Jums kylančius klausimus.</p>
+            </div>
+            <div className="closing-actions">
+              <a href="tel:+37067246656" className="button-light">
+                <Phone size={15} /> +370 672 46 656
+              </a>
+              <a href="mailto:info@kasnaiperis.lt">
+                info@kasnaiperis.lt
+              </a>
+            </div>
+          </div>
+        </section>
       </div>
     </div>
   );

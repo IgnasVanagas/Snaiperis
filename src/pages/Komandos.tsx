@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'wouter';
 import { teams } from '../data/teams';
-import { Users, MapPin, ChevronRight } from 'lucide-react';
+import { Users, MapPin, ArrowRight, ArrowUpRight, Check, Phone } from 'lucide-react';
 
 interface KomandosProps {
   onOpenRegister: () => void;
@@ -17,90 +17,130 @@ export const Komandos: React.FC<KomandosProps> = ({ onOpenRegister }) => {
     : teams.filter(t => t.year === selectedYear);
 
   return (
-    <div className="pt-28 pb-20 space-y-12">
-      {/* Header */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 text-center space-y-3">
-        <h1 className="text-3xl sm:text-5xl font-black font-display text-slate-900 tracking-tight">
-          KA „Snaiperis“ komandos
-        </h1>
-        <p className="text-slate-600 text-sm sm:text-base max-w-xl mx-auto">
-          Akademijos reprezentacinės komandos, besivaržančios Moksleivių krepšinio lygoje (MKL) ir KKML.
-        </p>
+    <div className="subpage">
+      {/* Editorial Page Header */}
+      <header className="page-header">
+        <div className="site-container page-header-content">
+          <span className="eyebrow"><span className="status-dot" /> MKL ir KKML rinktinės · 2009–2017 m. kartos</span>
+          <h1>Daugiau ryžto.<br /><span>Aukštesni tikslai.</span></h1>
+          <p className="page-header-desc">
+            10 reprezentacinių KA „Snaiperis“ komandų, kryptingas meistriškumo ugdymas ir varžybos stipriausiose Lietuvos bei tarptautinėse moksleivių krepšinio lygose.
+          </p>
+          <div className="hero-actions">
+            <button onClick={onOpenRegister} className="button-primary">
+              Registruotis į peržiūrą <ArrowUpRight size={17} />
+            </button>
+            <Link href="/priemimas" className="text-link">
+              Rasti treniruočių salę <ArrowRight size={16} />
+            </Link>
+          </div>
+          <div className="hero-reassurance" style={{ marginTop: '22px' }}>
+            <Check size={15} /> Licencijuoti treneriai
+            <span /> Moksleivių krepšinio lyga (MKL)
+            <span /> Tarptautiniai turnyrai Europoje
+          </div>
+        </div>
+      </header>
 
-        {/* Year Selector */}
-        <div className="flex flex-wrap justify-center gap-2 pt-3">
+      {/* Generation Filter Tabs */}
+      <section className="site-container pb-8">
+        <div className="filter-tabs">
           {years.map(y => (
             <button
               key={y}
+              aria-pressed={selectedYear === y}
               onClick={() => setSelectedYear(y)}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
-                selectedYear === y
-                  ? 'bg-snaiperis-red text-white shadow-sm'
-                  : 'bg-white border border-slate-200/80 text-slate-700 hover:bg-slate-50'
-              }`}
+              className="filter-tab"
             >
               {y === 'Visi' ? 'Visos kartos' : `${y} m. karta`}
             </button>
           ))}
         </div>
+
+        <div className="text-xs mt-6 mb-4" style={{ color: 'var(--muted)' }}>
+          Rasta komandų: <strong style={{ color: 'var(--ink)' }}>{filteredTeams.length}</strong>
+        </div>
       </section>
 
       {/* Teams Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8">
+      <section className="site-container pb-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredTeams.map(team => (
             <Link
               key={team.id}
               href={`/komandos/${team.slug}`}
-              className="bg-white rounded-3xl overflow-hidden border border-slate-200/80 shadow-sm hover:border-snaiperis-red/40 hover:shadow-lg transition-all flex flex-col justify-between group cursor-pointer"
+              className="news-card"
+              style={{
+                background: '#fff',
+                border: '1px solid var(--line)',
+                borderRadius: '4px',
+                overflow: 'hidden',
+                display: 'flex',
+                flexDirection: 'column'
+              }}
             >
-              <div>
-                <div className="relative aspect-video overflow-hidden bg-slate-900">
-                  <img 
-                    src={team.image} 
-                    alt={team.name} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://kasnaiperis.lt/wp-content/uploads/2026/08/cempionatu-titulinis-1.jpg';
-                    }}
-                  />
-                  <div className="absolute top-4 left-4 flex gap-2">
-                    <span className="bg-snaiperis-red text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                      {team.year} m.
-                    </span>
-                    <span className="bg-slate-950/80 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                      {team.division}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-6 space-y-3">
-                  <h3 className="font-bold text-xl text-slate-900 group-hover:text-snaiperis-red transition-colors">
-                    {team.name}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-600 line-clamp-2 leading-relaxed">
-                    {team.description}
-                  </p>
-
-                  <div className="pt-3 border-t border-slate-100 space-y-2 text-xs text-slate-600">
-                    <div className="flex items-center">
-                      <Users className="w-4 h-4 mr-2 text-slate-400 shrink-0" />
-                      <span><strong>Treneris:</strong> {team.coach}</span>
-                    </div>
-                    <div className="flex items-center">
-                      <MapPin className="w-4 h-4 mr-2 text-slate-400 shrink-0" />
-                      <span className="truncate">{team.hall}</span>
-                    </div>
-                  </div>
+              <div style={{ aspectRatio: '16/10', overflow: 'hidden', position: 'relative', background: '#e7e8df' }}>
+                <img 
+                  src={team.image} 
+                  alt={team.name} 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform .45s' }}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = '/images/academy-team.jpg';
+                  }}
+                />
+                <div style={{ position: 'absolute', top: '14px', left: '14px', display: 'flex', gap: '6px' }}>
+                  <span className="tag-badge tag-badge-red">{team.year} m.</span>
+                  <span className="tag-badge" style={{ background: '#202320eb', color: '#fff' }}>{team.division}</span>
                 </div>
               </div>
 
-              <div className="p-6 pt-0 flex items-center justify-between border-t border-slate-50 text-xs font-bold text-snaiperis-red">
-                <span>Sudėtis ir tvarkaraštis</span>
-                <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                <h3 style={{ fontSize: '20px', lineHeight: '1.3', marginBottom: '8px' }}>
+                  {team.name}
+                </h3>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: '1.8', marginBottom: '18px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                  {team.description}
+                </p>
+
+                <div style={{ borderTop: '1px solid var(--line)', paddingTop: '16px', marginTop: 'auto', display: 'grid', gap: '8px', fontSize: '11px', color: 'var(--muted)' }}>
+                  <div className="flex items-center gap-2">
+                    <Users size={14} style={{ color: 'var(--red)', flexShrink: 0 }} />
+                    <span>Treneris: <strong style={{ color: 'var(--ink)' }}>{team.coach}</strong></span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <MapPin size={14} style={{ color: 'var(--muted)', flexShrink: 0 }} />
+                    <span className="truncate">{team.hall}</span>
+                  </div>
+                </div>
+
+                <span className="news-read" style={{ marginTop: '16px', paddingTop: '14px', borderTop: '1px solid var(--line)' }}>
+                  Sudėtis ir tvarkaraštis <ArrowUpRight size={15} />
+                </span>
               </div>
             </Link>
           ))}
+        </div>
+      </section>
+
+      {/* Closing CTA */}
+      <section className="closing-section">
+        <div className="site-container">
+          <div className="closing-card">
+            <div className="court-lines" aria-hidden="true" />
+            <div>
+              <span className="eyebrow">Atranka į komandas</span>
+              <h2>Nori atstovauti<br />Snaiperio rinktinei?</h2>
+              <p>Mūsų treneriai kviečia talentingus ir motyvuotus žaidėjus į peržiūras bei meistriškumo stovyklas.</p>
+            </div>
+            <div className="closing-actions">
+              <button onClick={onOpenRegister} className="button-light">
+                Užsiregistruoti <ArrowUpRight size={18} />
+              </button>
+              <a href="tel:+37067246656">
+                <Phone size={15} /> +370 672 46 656
+              </a>
+            </div>
+          </div>
         </div>
       </section>
     </div>

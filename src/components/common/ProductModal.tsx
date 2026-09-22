@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { X, Check, ShoppingBag, ShieldCheck, Truck } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Check, ArrowUpRight } from 'lucide-react';
 import { Product } from '../../data/merchandise';
 
 interface ProductModalProps {
@@ -13,6 +13,28 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
   const [isOrdered, setIsOrdered] = useState<boolean>(false);
   const [parentName, setParentName] = useState('');
   const [parentPhone, setParentPhone] = useState('');
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!product) return;
+    setIsOrdered(false);
+    if (product.sizes && product.sizes.length > 0) {
+      setSelectedSize(product.sizes[0]);
+    }
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = previous;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [product, onClose]);
 
   if (!product) return null;
 
@@ -21,85 +43,88 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
     setIsOrdered(true);
   };
 
-  const handleClose = () => {
-    setIsOrdered(false);
-    onClose();
-  };
-
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in"
-      onClick={handleClose}
+      className="registration-overlay"
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div 
-        className="relative w-full max-w-xl bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col md:flex-row max-h-[90vh]"
-        onClick={e => e.stopPropagation()}
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="product-title"
+        className="registration-dialog"
+        style={{ maxWidth: '580px' }}
       >
         <button 
-          onClick={handleClose}
-          className="absolute top-3 right-3 z-10 text-slate-400 hover:text-slate-800 p-1.5 rounded-full bg-white/80 border border-slate-200 transition-colors"
+          ref={closeRef}
+          onClick={onClose} 
+          aria-label="Uždaryti" 
+          className="icon-button registration-close"
         >
-          <X className="w-4 h-4" />
+          <X size={21} />
         </button>
 
-        {/* Product Image preview */}
-        <div className="md:w-1/2 bg-slate-50 p-6 flex items-center justify-center relative min-h-[220px]">
-          <span className="absolute top-3 left-3 bg-snaiperis-dark text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
-            {product.category}
-          </span>
-          <img 
-            src={product.image} 
-            alt={product.name} 
-            className="max-h-52 object-contain"
-          />
-        </div>
+        <span className="eyebrow"><span className="status-dot" /> Oficiali atributika · {product.category}</span>
 
-        {/* Product details & order inquiry */}
-        <div className="md:w-1/2 p-6 flex flex-col justify-between overflow-y-auto">
-          {isOrdered ? (
-            <div className="text-center py-6 my-auto">
-              <div className="w-10 h-10 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-2">
-                <Check className="w-5 h-5" />
+        {isOrdered ? (
+          <div style={{ textAlign: 'center', padding: '36px 0' }}>
+            <span className="eyebrow" style={{ justifyContent: 'center' }}><span className="status-dot" /> Užsakymas priimtas</span>
+            <h2 style={{ fontSize: '26px', marginTop: '12px' }}>Prekė sėkmingai rezervuota!</h2>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.8', maxWidth: '440px', margin: '12px auto 24px' }}>
+              Rezervuota: <strong style={{ color: 'var(--ink)' }}>{product.name}</strong> ({selectedSize} dydis, {quantity} vnt.).
+              Akademijos administracija susisieks su Jumis dėl atsiėmimo treniruotėje.
+            </p>
+            <button
+              onClick={onClose}
+              className="button-primary"
+              style={{ minHeight: '44px', padding: '12px 24px' }}
+            >
+              Uždaryti langą
+            </button>
+          </div>
+        ) : (
+          <div>
+            <div className="grid grid-cols-1 sm:grid-cols-12 gap-6 mt-4 pb-6 border-b border-[var(--line)]">
+              {/* Image */}
+              <div className="sm:col-span-5" style={{ background: '#eeefe8', borderRadius: '4px', padding: '16px', display: 'grid', placeItems: 'center', minHeight: '180px' }}>
+                <img 
+                  src={product.image} 
+                  alt={product.name} 
+                  style={{ maxHeight: '180px', objectFit: 'contain', mixBlendMode: 'multiply' }}
+                />
               </div>
-              <h3 className="text-lg font-bold text-slate-900 mb-1">Užsakymas priimtas!</h3>
-              <p className="text-xs text-slate-600 mb-4">
-                Prekė rezervuota: <strong>{product.name}</strong> ({selectedSize} dydis, {quantity} vnt.).
-                Mūsų administratorė susisieks su Jumis dėl atsiėmimo treniruotėje.
-              </p>
-              <button
-                onClick={handleClose}
-                className="px-4 py-2 bg-snaiperis-dark text-white text-xs font-bold rounded-xl"
-              >
-                Uždaryti
-              </button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div>
-                <h2 className="text-lg font-bold text-slate-900 leading-snug">
+
+              {/* Title & Price */}
+              <div className="sm:col-span-7 flex flex-col justify-center">
+                <h2 id="product-title" style={{ fontSize: '24px', margin: 0, lineHeight: 1.25 }}>
                   {product.name}
                 </h2>
-                <div className="text-xl font-black text-snaiperis-red mt-1">
+                <div style={{ fontSize: '26px', fontFamily: "'Outfit', sans-serif", fontWeight: 500, color: 'var(--red)', marginTop: '8px' }}>
                   {product.price}
                 </div>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: '1.6' }}>
+                  Aukštos kokybės oficiali akademijos atributika. Galite atsiimti treniruočių salėje arba biure.
+                </p>
               </div>
+            </div>
 
+            <form onSubmit={handleOrder} style={{ marginTop: '20px' }}>
+              {/* Size Selector */}
               {product.sizes && product.sizes.length > 0 && (
-                <div>
-                  <div className="text-[11px] font-bold text-slate-600 uppercase tracking-wider mb-1.5">
-                    Dydis:
-                  </div>
-                  <div className="flex flex-wrap gap-1">
+                <div style={{ marginBottom: '18px' }}>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '8px' }}>
+                    Pasirinkite dydį:
+                  </label>
+                  <div className="filter-tabs" style={{ marginTop: 0 }}>
                     {product.sizes.map(size => (
                       <button
                         key={size}
                         type="button"
                         onClick={() => setSelectedSize(size)}
-                        className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all ${
-                          selectedSize === size
-                            ? 'bg-snaiperis-red text-white border-snaiperis-red'
-                            : 'bg-slate-50 text-slate-700 border-slate-200 hover:bg-slate-100'
-                        }`}
+                        className="filter-tab"
+                        aria-pressed={selectedSize === size}
+                        style={{ padding: '6px 14px', fontSize: '11px' }}
                       >
                         {size}
                       </button>
@@ -108,57 +133,61 @@ export const ProductModal: React.FC<ProductModalProps> = ({ product, onClose }) 
                 </div>
               )}
 
-              {/* Order Reservation form */}
-              <form onSubmit={handleOrder} className="space-y-2.5 pt-2 border-t border-slate-100">
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Kiekis</label>
-                    <select
-                      value={quantity}
-                      onChange={e => setQuantity(Number(e.target.value))}
-                      className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs font-semibold"
-                    >
-                      {[1, 2, 3, 4, 5].map(n => (
-                        <option key={n} value={n}>{n} vnt.</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Telefonas *</label>
-                    <input
-                      type="tel"
-                      required
-                      placeholder="+370 6..."
-                      value={parentPhone}
-                      onChange={e => setParentPhone(e.target.value)}
-                      className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs"
-                    />
-                  </div>
-                </div>
-
+              {/* Quantity and Contacts */}
+              <div className="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                  <label className="block text-[10px] font-bold text-slate-500 uppercase mb-0.5">Užsakovo vardas *</label>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '6px' }}>
+                    Kiekis
+                  </label>
+                  <select
+                    value={quantity}
+                    onChange={e => setQuantity(Number(e.target.value))}
+                    style={{ width: '100%', border: '1px solid var(--line)', borderRadius: '4px', padding: '10px 12px', fontSize: '13px', background: '#fff' }}
+                  >
+                    {[1, 2, 3, 4, 5].map(n => (
+                      <option key={n} value={n}>{n} vnt.</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '6px' }}>
+                    Telefonas *
+                  </label>
                   <input
-                    type="text"
+                    type="tel"
                     required
-                    placeholder="Vardas Pavardė"
-                    value={parentName}
-                    onChange={e => setParentName(e.target.value)}
-                    className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                    placeholder="+370 6..."
+                    value={parentPhone}
+                    onChange={e => setParentPhone(e.target.value)}
+                    style={{ width: '100%', border: '1px solid var(--line)', borderRadius: '4px', padding: '10px 12px', fontSize: '13px' }}
                   />
                 </div>
+              </div>
 
-                <button
-                  type="submit"
-                  className="w-full py-2.5 bg-snaiperis-red hover:bg-snaiperis-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors flex items-center justify-center space-x-1.5 mt-1"
-                >
-                  <ShoppingBag className="w-3.5 h-3.5" />
-                  <span>Rezervuoti</span>
-                </button>
-              </form>
-            </div>
-          )}
-        </div>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', fontSize: '11px', fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', marginBottom: '6px' }}>
+                  Užsakovo vardas, pavardė *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Vardas Pavardė"
+                  value={parentName}
+                  onChange={e => setParentName(e.target.value)}
+                  style={{ width: '100%', border: '1px solid var(--line)', borderRadius: '4px', padding: '10px 12px', fontSize: '13px' }}
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="button-primary"
+                style={{ width: '100%' }}
+              >
+                Pateikti rezervacijos užklausą <ArrowUpRight size={17} />
+              </button>
+            </form>
+          </div>
+        )}
       </div>
     </div>
   );

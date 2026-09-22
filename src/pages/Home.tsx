@@ -1,22 +1,11 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Link } from 'wouter';
-import { 
-  Trophy, 
-  Users, 
-  MapPin, 
-  Flame, 
-  ArrowRight, 
-  CheckCircle2, 
-  ChevronRight,
-  ShieldCheck,
-  Award,
-  Sparkles,
-  Phone
-} from 'lucide-react';
+import { ArrowDown, ArrowRight, ArrowUpRight, Check, ChevronDown, MapPin, Phone, ShieldCheck, Target, Users } from 'lucide-react';
 import { locations } from '../data/locations';
 import { coaches, Coach } from '../data/coaches';
 import { newsArticles } from '../data/news';
 import { merchandise, Product } from '../data/merchandise';
+import { faqList } from '../data/faq';
 
 interface HomeProps {
   onOpenRegister: (gym?: string, coach?: string) => void;
@@ -24,499 +13,70 @@ interface HomeProps {
   onSelectProduct: (product: Product) => void;
 }
 
+const programs = [
+  { number: '01', age: '4–7 metai', title: 'Maži žingsniai. Dideli atradimai.', name: 'Darželinukai', description: 'Pirmieji krepšinio įgūdžiai, judrieji žaidimai ir koordinacija. Mažesni kamuoliai, žemesni krepšiai ir daug džiaugsmo.', href: '/darzelinukai' },
+  { number: '02', age: 'U8–U11', title: 'Pirmoji komanda. Pirmosios pergalės.', name: 'Čempionų lyga', description: 'Vidinis akademijos čempionatas, kuriame mokomės žaisti kartu ir atrandame tikrų krepšinio rungtynių jaudulį.', href: '/cempionu-lyga' },
+  { number: '03', age: '2009–2017 m. kartos', title: 'Daugiau ryžto. Aukštesni tikslai.', name: 'MKL rinktinės', description: '10 reprezentacinių komandų, kryptingas meistriškumo ugdymas ir varžybos Lietuvoje bei tarptautiniuose turnyruose.', href: '/komandos' },
+  { number: '04', age: 'Vasaros atostogoms', title: 'Aktyvi vasara. Tikra draugystė.', name: 'Vasaros stovyklos', description: 'Dieninės stovyklos Kaune ir išvažiuojamosios su nakvyne gamtoje. Krepšinis, nauji draugai ir nepamirštamos patirtys.', href: '/stovyklos' },
+];
+
 export const Home: React.FC<HomeProps> = ({ onOpenRegister, onSelectCoach, onSelectProduct }) => {
-  const [selectedDistrict, setSelectedDistrict] = useState('Centras');
-
+  const [selectedDistrict, setSelectedDistrict] = useState(locations[0].district);
   const activeGyms = locations.find(d => d.district === selectedDistrict)?.gyms || [];
-  const latestNews = newsArticles.slice(0, 3);
-  const featuredCoaches = coaches.slice(0, 6);
-  const featuredMerch = merchandise.slice(0, 4);
-
   return (
-    <div className="space-y-0 text-slate-800">
-      {/* 1. HERO SECTION — Bright, Spacious, Clean 2026 Editorial Athletic Aesthetic */}
-      <section className="relative pt-32 pb-16 md:pt-40 md:pb-24 bg-gradient-to-b from-slate-50 via-white to-white overflow-hidden border-b border-slate-100">
-        {/* Subtle Warm Ambient Glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-snaiperis-red/[0.04] blur-[120px] pointer-events-none rounded-full" />
-
-        <div className="max-w-6xl mx-auto px-4 sm:px-8 relative z-10 text-center space-y-8">
-          {/* Master Headline */}
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black font-display tracking-tight text-slate-950 leading-[1.08] max-w-4xl mx-auto">
-            Aukime kartu aikštelėje ir gyvenime
-          </h1>
-
-          {/* Subtitle */}
-          <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto font-normal leading-relaxed">
-            Vaikų ir jaunimo krepšinio akademija Kaune nuo 2004 metų. 22 kvalifikuoti pedagogai, virš 15 sporto bazių ir oficialios MKL rinktinės.
-          </p>
-
-          {/* Clean Call-to-Actions */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-1">
-            <button
-              onClick={() => onOpenRegister()}
-              className="w-full sm:w-auto px-8 py-3.5 bg-snaiperis-red hover:bg-snaiperis-red-600 text-white font-bold text-xs uppercase tracking-wider rounded-full transition-all shadow-md hover:shadow-lg active:scale-95 flex items-center justify-center space-x-2"
-            >
-              <Flame className="w-4 h-4 text-snaiperis-gold" />
-              <span>Registruotis į nemokamą treniruotę</span>
-            </button>
-
-            <a
-              href="#gym-finder"
-              className="w-full sm:w-auto px-7 py-3.5 bg-white hover:bg-slate-50 text-slate-800 font-semibold text-xs uppercase tracking-wider rounded-full transition-colors border border-slate-200 flex items-center justify-center space-x-2"
-            >
-              <MapPin className="w-4 h-4 text-snaiperis-red" />
-              <span>Rasti artimiausią salę</span>
-            </a>
+    <div className="home-page">
+      <section className="hero-section" aria-labelledby="hero-title">
+        <div className="site-container hero-grid">
+          <div className="hero-copy">
+            <span className="eyebrow"><span className="status-dot" /> Krepšinio akademija · Kaunas · Nuo 2004</span>
+            <h1 id="hero-title">Čia auga<br />daugiau nei<br /><span>krepšininkai.</span></h1>
+            <p className="hero-description">Pasitikėjimas savimi. Draugystė. Meilė judėti.<br className="hidden sm:block" /> Krepšinio treniruotės 4–18 metų vaikams ir jaunimui, kur kiekvienas atranda savo vietą komandoje.</p>
+            <div className="hero-actions"><button className="button-primary" onClick={() => onOpenRegister()}>Išbandyti nemokamai <ArrowUpRight size={18} /></button><a href="#gym-finder" className="text-link">Rasti treniruočių salę <ArrowRight size={17} /></a></div>
+            <div className="hero-reassurance"><Check size={15} /> Pirmoji treniruotė nemokama <span /> Patirtis nebūtina</div>
+            <a className="hero-discover" href="#programos"><span><ArrowDown size={16} /></span> Didelė kelionė prasideda nuo pirmo metimo</a>
           </div>
-
-          {/* Inspiring Hero Visual Banner */}
-          <div className="pt-6 max-w-5xl mx-auto">
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl border border-slate-200/80 bg-slate-900 aspect-[16/9] sm:aspect-[21/9]">
-              <img
-                src="https://kasnaiperis.lt/wp-content/uploads/2026/08/cempionatu-titulinis.jpg"
-                alt="KA Snaiperis čempionai ir auklėtiniai"
-                className="w-full h-full object-cover object-center"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-6 sm:p-8">
-                <div className="flex flex-wrap items-center justify-between gap-4 w-full text-white text-left">
-                  <div>
-                    <div className="text-base sm:text-xl font-bold font-display">Čempionų dvasia, draugystė ir pagarba sportui</div>
-                  </div>
-                  <div className="text-xs bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full font-medium">
-                    Kauno miestas ir rajonas
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Minimalist Metrics Strip */}
-          <div className="pt-8 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto text-center">
-            <div>
-              <div className="text-3xl sm:text-4xl font-black font-display text-slate-900">20+</div>
-              <div className="text-xs text-slate-500 font-medium mt-1">Metų patirtis</div>
-            </div>
-            <div>
-              <div className="text-3xl sm:text-4xl font-black font-display text-snaiperis-red">1000+</div>
-              <div className="text-xs text-slate-500 font-medium mt-1">Auklėtinių Kaune</div>
-            </div>
-            <div>
-              <div className="text-3xl sm:text-4xl font-black font-display text-slate-900">22</div>
-              <div className="text-xs text-slate-500 font-medium mt-1">Treneriai pedagogai</div>
-            </div>
-            <div>
-              <div className="text-3xl sm:text-4xl font-black font-display text-snaiperis-red">15+</div>
-              <div className="text-xs text-slate-500 font-medium mt-1">Sporto bazių Kaune</div>
-            </div>
+          <div className="hero-visual">
+            <img src="/images/academy-team.jpg" alt="Snaiperio auklėtiniai kartu džiaugiasi iškovota taure" width="2048" height="1365" fetchPriority="high" className="hero-photo" />
+            <div className="hero-photo-shade" /><span className="photo-label"><span /> Viena komanda. Tūkstantis istorijų.</span>
+            <div className="hero-photo-caption"><span>Aukime kartu.</span><p>Aikštelėje ir gyvenime.</p></div><div className="hero-photo-index" aria-hidden="true">KA / 04</div>
           </div>
         </div>
+        <div className="site-container stats-strip">{[['20+', 'metų auginame asmenybes'], ['1 000+', 'vaikų mūsų bendruomenėje'], ['22', 'treneriai ir pedagogai'], ['15+', 'sporto salių arčiau namų']].map(([value, label]) => <div className="stat" key={label}><strong>{value}<span>.</span></strong><span>{label}</span></div>)}</div>
       </section>
-
-      {/* 2. CORE PROGRAMS — Clean, Spacious 4-Column Layout */}
-      <section className="py-20 md:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <h2 className="text-3xl sm:text-4xl font-black font-display text-slate-900 tracking-tight">
-              Krepšinis kiekvienam amžiaus tarpsniui
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base">
-              Kryptingas meistriškumo ir charakterio ugdymas nuo 4 iki 18 metų.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Program 1 */}
-            <Link 
-              href="/darzelinukai" 
-              className="group bg-slate-50/70 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-100 hover:border-slate-200 hover:shadow-xl transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-3">
-                <h3 className="text-xl font-bold text-slate-900 group-hover:text-snaiperis-red transition-colors">
-                  Darželinukai
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Pirmieji krepšinio įgūdžiai, koordinacija ir linksmi judrieji žaidimai su žemesniais krepšiais 4–7 metų vaikams.
-                </p>
-              </div>
-              <div className="mt-6 flex items-center text-xs font-bold text-snaiperis-red">
-                <span>Plačiau apie programą</span>
-                <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-
-            {/* Program 2 */}
-            <Link 
-              href="/cempionu-lyga" 
-              className="group bg-slate-50/70 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-100 hover:border-slate-200 hover:shadow-xl transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-3">
-                <h3 className="text-xl font-bold text-slate-900 group-hover:text-snaiperis-red transition-colors">
-                  Čempionų lyga
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Vidinis akademijos čempionatas U8–U11 moksleiviams, kur vaikai įgyja pirmosios oficialių varžybų patirties.
-                </p>
-              </div>
-              <div className="mt-6 flex items-center text-xs font-bold text-snaiperis-red">
-                <span>Tvarkaraštis ir taisyklės</span>
-                <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-
-            {/* Program 3 */}
-            <Link 
-              href="/komandos" 
-              className="group bg-slate-50/70 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-100 hover:border-slate-200 hover:shadow-xl transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-3">
-                <h3 className="text-xl font-bold text-slate-900 group-hover:text-snaiperis-red transition-colors">
-                  MKL Rinktinės
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  10 reprezentacinių 2009–2017 m. komandų, besivaržančių Moksleivių krepšinio lygoje ir tarptautiniuose turnyruose.
-                </p>
-              </div>
-              <div className="mt-6 flex items-center text-xs font-bold text-snaiperis-red">
-                <span>Visos 10 rinktinių</span>
-                <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-
-            {/* Program 4 */}
-            <Link 
-              href="/stovyklos" 
-              className="group bg-slate-50/70 hover:bg-white rounded-3xl p-6 sm:p-7 border border-slate-100 hover:border-slate-200 hover:shadow-xl transition-all flex flex-col justify-between"
-            >
-              <div className="space-y-3">
-                <h3 className="text-xl font-bold text-slate-900 group-hover:text-snaiperis-red transition-colors">
-                  Vasaros stovyklos
-                </h3>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Dieninė krepšinio stovykla Kaune bei išvažiuojamosios stovyklos su nakvyne gamtoje vasaros atostogų metu.
-                </p>
-              </div>
-              <div className="mt-6 flex items-center text-xs font-bold text-snaiperis-red">
-                <span>Pamainos ir rezervacija</span>
-                <ChevronRight className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </Link>
-          </div>
+      <section id="programos" className="section-space"><div className="site-container">
+        <div className="section-heading"><div><span className="eyebrow">Kiekvienam savo startas</span><h2>Mažiems žingsniams.<br />Didelėms svajonėms.</h2></div><p>Nuo pirmo kamuolio iki pirmo čempionato.<br />Atraskite savo vaiko amžiui ir patirčiai tinkamą kelią.</p></div>
+        <div className="program-grid">{programs.map(program => <Link key={program.number} href={program.href} className="program-card"><div className="program-meta"><span>{program.number}</span><span>{program.age}</span></div><h3>{program.name}</h3><h4>{program.title}</h4><p>{program.description}</p><span className="program-link">Atrasti programą <ArrowUpRight size={19} /></span></Link>)}</div>
+        <div className="program-help"><span>Nežinote, nuo ko pradėti? Padėsime išsirinkti tinkamą grupę.</span><a href="tel:+37067246656"><Phone size={14} /> +370 672 46 656</a></div>
+      </div></section>
+      <section className="values-section section-space"><div className="site-container values-grid">
+        <div className="values-visual"><img src="/images/young-players.jpg" alt="Jaunieji akademijos žaidėjai mokosi krepšinio ir komandinio žaidimo" loading="lazy" width="1024" height="683" /><div><span>Ne tik geresnis žaidėjas.</span><strong>Labiau savimi pasitikintis vaikas.</strong></div></div>
+        <div className="values-copy"><span className="eyebrow">Daugiau nei sportas</span><h2>Gera vieta<br />augti kartu.</h2><p className="section-intro">Mums svarbūs ne tik taškai švieslentėje. Svarbu, kaip vaikas jaučiasi, ko išmoksta ir su kokia šypsena grįžta namo.</p>
+          <div className="value-row"><Target size={23} /><div><h3>Treniruotės pagal vaiką</h3><p>Amžiui pritaikyta metodika, mažesni kamuoliai ir žemesni krepšiai – kad sėkmę patirtų nuo pirmos dienos.</p></div></div>
+          <div className="value-row"><ShieldCheck size={23} /><div><h3>Pagarba ir emocinis saugumas</h3><p>Mokomės palaikyti komandos draugą, gerbti varžovą ir drąsiai bandyti. Pozityvus tėvų palaikymas – mūsų kultūros dalis.</p></div></div>
+          <div className="value-row"><Users size={23} /><div><h3>Prieinama daugiau šeimų</h3><p>Akredituotos NVŠ programos ir nuolaidos broliams bei seserims. <Link href="/neformalaus-ugdymo-krepselis">Apie kompensaciją <ArrowUpRight size={13} /></Link></p></div></div>
         </div>
-      </section>
-
-      {/* 3. INTERACTIVE GYM FINDER — Sleek, Clean, Modern Directory */}
-      <section id="gym-finder" className="py-20 bg-slate-50/70 border-t border-slate-200/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div>
-              <h2 className="text-3xl font-black font-display text-slate-900 tracking-tight">
-                Treniruočių salės ir tvarkaraščiai
-              </h2>
-              <p className="text-slate-600 text-xs sm:text-sm mt-1">
-                Pasirinkite savo mikrorajoną ir raskite artimiausią krepšinio salę.
-              </p>
-            </div>
-            <Link 
-              href="/priemimas" 
-              className="inline-flex items-center space-x-1.5 text-xs font-bold text-snaiperis-red hover:text-snaiperis-red-700 transition-colors shrink-0"
-            >
-              <span>Visi 15+ salių tvarkaraščiai</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {/* District Filter Pills */}
-          <div className="flex flex-wrap gap-2">
-            {locations.map(d => (
-              <button
-                key={d.district}
-                onClick={() => setSelectedDistrict(d.district)}
-                className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
-                  selectedDistrict === d.district
-                    ? 'bg-snaiperis-red text-white shadow-sm'
-                    : 'bg-white text-slate-600 hover:bg-slate-100 border border-slate-200/80'
-                }`}
-              >
-                {d.district}
-              </button>
-            ))}
-          </div>
-
-          {/* Gym list */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {activeGyms.map((gym, idx) => (
-              <div
-                key={idx}
-                className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm hover:border-snaiperis-red/40 transition-all flex flex-col justify-between"
-              >
-                <div className="space-y-2">
-                  <h3 className="font-bold text-slate-900 text-base">{gym.name}</h3>
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-snaiperis-red">{selectedDistrict}</span>
-                    <span className="text-slate-400 font-mono text-[11px]">{gym.years.join(', ')} m.</span>
-                  </div>
-                  <div className="text-xs text-slate-500 flex items-center">
-                    <MapPin className="w-3.5 h-3.5 mr-1 text-slate-400 shrink-0" />
-                    <span className="truncate">{gym.address}</span>
-                  </div>
-                  <div className="text-xs text-slate-600 pt-1">
-                    <span className="text-slate-400">Treneris:</span> <strong className="text-slate-800">{gym.coach}</strong>
-                  </div>
-                </div>
-
-                <div className="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
-                  <a
-                    href={`tel:${gym.phone.replace(/\s+/g, '')}`}
-                    className="text-xs font-semibold text-slate-600 hover:text-snaiperis-red flex items-center"
-                  >
-                    <Phone className="w-3 h-3 mr-1 text-snaiperis-red" />
-                    <span>{gym.phone}</span>
-                  </a>
-                  <button
-                    onClick={() => onOpenRegister(gym.name, gym.coach)}
-                    className="px-4 py-1.5 bg-slate-900 hover:bg-snaiperis-red text-white text-xs font-bold rounded-lg transition-colors"
-                  >
-                    Registruotis
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. ACADEMY VALUES — Clean 3 Pillars */}
-      <section className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
-          <div className="text-center max-w-2xl mx-auto space-y-2">
-            <h2 className="text-3xl sm:text-4xl font-black font-display text-slate-900 tracking-tight">
-              Kodėl tėveliai renkasi KA „Snaiperis“?
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="space-y-3 p-8 rounded-3xl bg-slate-50/70 border border-slate-100">
-              <div className="w-10 h-10 rounded-xl bg-red-50 text-snaiperis-red flex items-center justify-center font-bold">
-                <Award className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900">Pritaikyta metodika</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Mažiesiems naudojame žemesnius krepšius ir lengvesnius kamuolius, kad vaikas jaustų sėkmės džiaugsmą nuo pat pirmos treniruotės.
-              </p>
-            </div>
-
-            <div className="space-y-3 p-8 rounded-3xl bg-slate-50/70 border border-slate-100">
-              <div className="w-10 h-10 rounded-xl bg-red-50 text-snaiperis-red flex items-center justify-center font-bold">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900">Emocinis saugumas</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Akademijoje ugdome pagarbą varžovams, teisėjams ir komandos draugams. Rungtynėse skatiname pozityvų tėvelių palaikymą.
-              </p>
-            </div>
-
-            <div className="space-y-3 p-8 rounded-3xl bg-slate-50/70 border border-slate-100">
-              <div className="w-10 h-10 rounded-xl bg-red-50 text-snaiperis-red flex items-center justify-center font-bold">
-                <CheckCircle2 className="w-5 h-5" />
-              </div>
-              <h3 className="text-lg font-bold text-slate-900">NVŠ kompensacija</h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Akredituota neformalaus ugdymo įstaiga: savivaldybės krepšelis sumažina mėnesinį mokestį 15–50 € kiekvienam 1–12 klasių mokiniui.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. COACHES SPOTLIGHT — Minimalist Clean Roster */}
-      <section className="py-20 bg-slate-50/70 border-t border-slate-200/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-black font-display text-slate-900 tracking-tight">
-                Mūsų treneriai
-              </h2>
-            </div>
-            <Link 
-              href="/treneriai" 
-              className="text-xs font-bold text-snaiperis-red hover:text-snaiperis-red-700 flex items-center space-x-1"
-            >
-              <span>Visi 22 treneriai</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-            {featuredCoaches.map(coach => (
-              <div
-                key={coach.id}
-                onClick={() => onSelectCoach(coach)}
-                className="bg-white rounded-2xl overflow-hidden border border-slate-200/80 hover:border-snaiperis-red/40 transition-all cursor-pointer group flex flex-col justify-between shadow-sm"
-              >
-                <div className="relative aspect-square overflow-hidden bg-slate-100">
-                  <img 
-                    src={coach.image} 
-                    alt={coach.name} 
-                    className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://kasnaiperis.lt/wp-content/themes/snaiperis/assets/img/mainLogo.png';
-                    }}
-                  />
-                </div>
-                <div className="p-3">
-                  <h3 className="font-bold text-slate-900 text-xs sm:text-sm group-hover:text-snaiperis-red transition-colors line-clamp-1">
-                    {coach.name}
-                  </h3>
-                  <div className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">{coach.role}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 6. LATEST NEWS — Clean 3-Card Grid */}
-      <section className="py-20 bg-white border-t border-slate-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-black font-display text-slate-900 tracking-tight">
-                Naujausi įvykiai ir rezultatai
-              </h2>
-            </div>
-            <Link 
-              href="/naujienos" 
-              className="text-xs font-bold text-snaiperis-red hover:text-snaiperis-red-700 flex items-center space-x-1"
-            >
-              <span>Visos naujienos</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {latestNews.map(news => (
-              <Link 
-                key={news.id} 
-                href={`/naujienos/${news.slug}`}
-                className="bg-white rounded-3xl overflow-hidden border border-slate-200/80 hover:border-snaiperis-red/40 hover:shadow-xl transition-all flex flex-col group"
-              >
-                <div className="relative aspect-video overflow-hidden bg-slate-100">
-                  <span className="absolute top-3 left-3 z-10 bg-snaiperis-red text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                    {news.category}
-                  </span>
-                  <img 
-                    src={news.image} 
-                    alt={news.title} 
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = 'https://kasnaiperis.lt/wp-content/uploads/2026/08/cempionatu-titulinis-1.jpg';
-                    }}
-                  />
-                </div>
-                <div className="p-6 flex-grow flex flex-col justify-between space-y-2">
-                  <div>
-                    <h3 className="font-bold text-slate-900 text-base group-hover:text-snaiperis-red transition-colors leading-snug line-clamp-2">
-                      {news.title}
-                    </h3>
-                    <div className="text-[11px] text-slate-400 font-medium mt-1.5">{news.date}</div>
-                  </div>
-                  <div className="text-xs font-bold text-snaiperis-red flex items-center pt-2">
-                    <span>Skaityti straipsnį</span>
-                    <ChevronRight className="w-3.5 h-3.5 ml-1" />
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 7. MERCHANDISE STRIP */}
-      <section className="py-20 bg-slate-50/70 border-t border-slate-200/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-3xl font-black font-display text-slate-900 tracking-tight">
-                Oficiali Snaiperio atributika
-              </h2>
-            </div>
-            <Link
-              href="/atributika"
-              className="text-xs font-bold text-snaiperis-red hover:text-snaiperis-red-700 flex items-center space-x-1"
-            >
-              <span>Visi produktai</span>
-              <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-            {featuredMerch.map(item => (
-              <div
-                key={item.id}
-                onClick={() => onSelectProduct(item)}
-                className="bg-white rounded-2xl p-4 border border-slate-200/80 hover:border-snaiperis-red/40 hover:shadow-lg transition-all cursor-pointer group flex flex-col justify-between"
-              >
-                <div className="aspect-square rounded-xl overflow-hidden bg-slate-50 p-4 flex items-center justify-center mb-3">
-                  <img src={item.image} alt={item.name} className="max-h-full object-contain group-hover:scale-105 transition-transform" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-xs sm:text-sm text-slate-900 line-clamp-1 group-hover:text-snaiperis-red transition-colors">
-                    {item.name}
-                  </h3>
-                  <div className="text-xs sm:text-sm font-black text-snaiperis-red mt-1">
-                    {item.price}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 8. LUXURY CTA BANNER — Rounded Card Container */}
-      <section className="py-16 md:py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-8">
-          <div className="bg-[#0a0b0e] text-white rounded-3xl p-8 sm:p-14 text-center space-y-5 shadow-2xl relative overflow-hidden">
-            <div className="relative z-10 max-w-2xl mx-auto space-y-4">
-              <h2 className="text-3xl sm:text-5xl font-black font-display tracking-tight text-white">
-                Norite išbandyti krepšinį?
-              </h2>
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-                Pirmoji bandomoji treniruotė akademijoje yra visiškai nemokama. Ateikite, pabendraukite su treneriu ir pajuskite krepšinio džiaugsmą.
-              </p>
-              <div className="pt-2">
-                <button
-                  onClick={() => onOpenRegister()}
-                  className="px-8 py-3.5 bg-snaiperis-red hover:bg-snaiperis-red-600 text-white font-bold text-xs uppercase tracking-wider rounded-full transition-all shadow-xl active:scale-95 inline-flex items-center space-x-2"
-                >
-                  <Flame className="w-4 h-4 text-snaiperis-gold" />
-                  <span>Registruotis nemokamai</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 9. PARTNERS */}
-      <section className="py-12 bg-white border-t border-slate-100 text-center">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8">
-          <div className="text-xs uppercase tracking-wider font-semibold text-slate-400 mb-6">
-            Akademijos partneriai ir rėmėjai
-          </div>
-          <div className="flex flex-wrap items-center justify-center gap-6 sm:gap-12 text-xs font-bold text-slate-500 uppercase tracking-wider">
-            <span>Kauno miesto savivaldybė</span>
-            <span>•</span>
-            <span>Moksleivių krepšinio lyga (MKL)</span>
-            <span>•</span>
-            <span>KKML</span>
-            <span>•</span>
-            <span>BaskEUball</span>
-            <span>•</span>
-            <span>Lietuvos krepšinio federacija</span>
-          </div>
-        </div>
-      </section>
+      </div></section>
+      <section id="gym-finder" className="gym-section section-space" aria-labelledby="gym-heading"><div className="site-container">
+        <div className="section-heading"><div><span className="eyebrow">Arčiau namų. Arčiau komandos.</span><h2 id="gym-heading">Jūsų rajone jau<br />laukia komanda.</h2></div><div><p>Treniruotės visame Kaune ir rajone.<br />Pasirinkite vietą, o mes padėsime žengti pirmą žingsnį.</p><Link href="/priemimas" className="text-link">Visos salės ir amžiaus grupės <ArrowUpRight size={16} /></Link></div></div>
+        <div className="district-filters" aria-label="Pasirinkite mikrorajoną">{locations.map(d => <button key={d.district} aria-pressed={selectedDistrict === d.district} onClick={() => setSelectedDistrict(d.district)}>{d.district}</button>)}</div>
+        <div className="gym-results" aria-live="polite" aria-atomic="true">{activeGyms.map(gym => <article className="gym-result" key={gym.name}><div className="gym-location"><span className="location-icon"><MapPin size={23} /></span><div><h3>{gym.name}</h3><a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(gym.address)}`} target="_blank" rel="noreferrer">{gym.address} <ArrowUpRight size={13} /></a></div></div><div className="gym-details"><span>Gimimo metai</span><p>{gym.years.join(', ')}</p><span>Treneris</span><p>{gym.coach}</p></div><div className="gym-actions"><button onClick={() => onOpenRegister(gym.name, gym.coach)} className="button-primary">Rinktis šią salę <ArrowRight size={16} /></button><a href={`tel:${gym.phone.replace(/\s+/g, '')}`}><Phone size={13} />{gym.phone}</a></div></article>)}</div>
+        <p className="gym-note"><Check size={15} /> Treniruotės laiką ir tinkamą grupę suderinsite su treneriu.</p>
+      </div></section>
+      <section className="section-space"><div className="site-container">
+        <div className="section-heading"><div><span className="eyebrow">Žmonės, kurie įkvepia</span><h2>Treneriai. Mokytojai.<br />Jūsų vaiko komanda.</h2></div><div><p>22 pedagogai, kuriuos vienija meilė krepšiniui<br />ir noras padėti kiekvienam vaikui augti.</p><Link href="/treneriai" className="text-link">Pažinti visus trenerius <ArrowUpRight size={16} /></Link></div></div>
+        <div className="coach-grid">{coaches.slice(0, 6).map(coach => <button key={coach.id} className="coach-card" onClick={() => onSelectCoach(coach)}><div className="coach-photo"><img src={coach.image} alt={coach.name} loading="lazy" /><span><ArrowUpRight size={18} /></span></div><h3>{coach.name}</h3><p>{coach.role}</p></button>)}</div>
+      </div></section>
+      <section className="news-section section-space"><div className="site-container">
+        <div className="section-heading"><div><span className="eyebrow">Gyvenimas akademijoje</span><h2>Mažos ir didelės<br />mūsų pergalės.</h2></div><Link href="/naujienos" className="text-link">Visos naujienos <ArrowUpRight size={16} /></Link></div>
+        <div className="news-grid">{newsArticles.slice(0, 3).map(news => <Link key={news.id} href={`/naujienos/${news.slug}`} className="news-card"><div className="news-image"><img src={news.image} alt={news.title} loading="lazy" onError={e => { if (!e.currentTarget.src.endsWith('/images/academy-team.jpg')) e.currentTarget.src = '/images/academy-team.jpg'; }} /></div><div className="news-meta"><span>{news.category}</span><time dateTime={news.date}>{news.date.split('-').join('.')}</time></div><h3>{news.title}</h3><span className="news-read">Skaityti istoriją <ArrowUpRight size={16} /></span></Link>)}</div>
+      </div></section>
+      <section className="section-space merch-section"><div className="site-container">
+        <div className="section-heading"><div><span className="eyebrow">Savo komanda. Savo spalvos.</span><h2>Snaiperis ir už aikštelės.</h2></div><Link href="/atributika" className="text-link">Visa atributika <ArrowUpRight size={16} /></Link></div>
+        <div className="merch-grid">{merchandise.slice(0, 4).map(item => <button className="merch-card" key={item.id} onClick={() => onSelectProduct(item)}><div className="merch-image"><img src={item.image} alt={item.name} loading="lazy" /><span><ArrowUpRight size={18} /></span></div><div className="merch-caption"><h3>{item.name}</h3><span>{item.price}</span></div></button>)}</div>
+      </div></section>
+      <section className="faq-section section-space"><div className="site-container faq-grid"><div><span className="eyebrow">Tėvams ramiau</span><h2>Prieš pirmą<br />treniruotę.</h2><p className="section-intro">Atsakymai į klausimus, kurie rūpi labiausiai.</p><Link href="/d-u-k" className="text-link">Visi klausimai ir atsakymai <ArrowUpRight size={16} /></Link></div><div className="faq-list">{[faqList[1], faqList[5], faqList[6], faqList[0]].map(faq => <details key={faq.q}><summary>{faq.q}<ChevronDown size={18} /></summary><p>{faq.a}</p></details>)}</div></div></section>
+      <section className="closing-section"><div className="site-container"><div className="closing-card"><div className="court-lines" aria-hidden="true" /><div><span className="eyebrow">Pirmas metimas – jūsų.</span><h2>Didelės istorijos<br />prasideda nuo „pabandom“.</h2><p>Ateikite susipažinti, pajudėti ir atrasti savo komandą.<br />Pirmoji treniruotė – mūsų dovana.</p></div><div className="closing-actions"><button onClick={() => onOpenRegister()} className="button-light">Išbandyti nemokamai <ArrowUpRight size={18} /></button><a href="tel:+37067246656"><Phone size={15} /> +370 672 46 656</a></div></div></div></section>
+      <section className="partners-section"><div className="site-container"><span className="eyebrow">Augame kartu su</span><div className="partners"><span>KAUNO MIESTAS</span><span>MKL<span>Moksleivių krepšinio lyga</span></span><span>KKML</span><span>BaskEUball</span><span>LIETUVOS KREPŠINIO<br />FEDERACIJA</span></div></div></section>
     </div>
   );
 };

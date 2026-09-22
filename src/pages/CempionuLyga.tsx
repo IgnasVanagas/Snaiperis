@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Trophy, FileText, ArrowRight, ShieldCheck, Award, Calendar, Users } from 'lucide-react';
+import { Trophy, FileText, ArrowRight, ArrowUpRight, ShieldCheck, Check, Phone } from 'lucide-react';
 import { eventsData } from '../data/events';
 
 interface CempionuLygaProps {
@@ -10,7 +10,6 @@ interface CempionuLygaProps {
 export const CempionuLyga: React.FC<CempionuLygaProps> = ({ onOpenRegister }) => {
   const [location, setLocation] = useLocation();
 
-  // Detect division from URL if present (e.g. /cempionu_lyga/u8 or /cempionu-lyga/u9)
   const getInitialDivision = (): 'u8' | 'u9' | 'u12' => {
     if (location.includes('u9')) return 'u9';
     if (location.includes('u12') || location.includes('u11')) return 'u12';
@@ -37,164 +36,168 @@ export const CempionuLyga: React.FC<CempionuLygaProps> = ({ onOpenRegister }) =>
     u8: {
       birth: '2017 m. ir jaunesni berniukai',
       director: 'Pirmenybių vyr. teisėjas Edgaras Bartuševičius',
-      timeframe: 'Pirmenybės vykdomos spalio – gegužės mėnesiais. Rungtynes komandos privalo sužaisti nurodytą savaitę pagal tvarkaraštį.',
-      rules: 'Žaidžiami 4 kėliniai po 8 minutes. Žaidžiama prie žemesnių (2.60 m) krepšių su 5 dydžio kamuoliais. Visi žaidėjai privalo gauti lygų žaidimo laiką.',
-      awards: '1–3 vietas iškovojusios komandos apdovanojamos taurėmis, o žaidėjai – medaliais. Kiekvienos komandos naudingiausias žaidėjas (MVP) gauna asmeninį prizą.'
+      timeframe: 'Pirmenybės vykdomos spalio – gegužės mėnesiais pagal nustatytą tvarkaraštį.',
+      rules: '4 kėliniai po 8 minutes. Žemesni (2.60 m) krepšiai, 5 dydžio kamuoliai. Lygus žaidimo laikas visiems.',
+      awards: '1–3 vietų komandoms – taurės ir medaliai. Kiekvienos komandos MVP žaidėjui – asmeninis prizas.'
     },
     u9: {
       birth: '2016 m. ir jaunesni berniukai',
       director: 'Pirmenybių vyr. teisėjas Edgaras Bartuševičius',
       timeframe: 'Pirmenybės vykdomos spalio – gegužės mėnesiais.',
-      rules: 'Žaidžiami 4 kėliniai po 8 minutes. Žaidžiama 4x4 arba 5x5 per visą aikštelę, skatinamas greitas kamuolio perdavimas ir aktyvi gynyba.',
+      rules: '4 kėliniai po 8 minutes per visą aikštelę, skatinamas greitas kamuolio perdavimas ir aktyvi gynyba.',
       awards: 'Čempionato nugalėtojų taurė, sidabro ir bronzos medaliai, asmeniniai apdovanojimai simboliniam penketukui.'
     },
     u12: {
       birth: '2013–2015 m. gimimo berniukai (U11 / U12)',
       director: 'Pirmenybių vyr. teisėjas Edgaras Bartuševičius',
       timeframe: 'Pirmenybės vykdomos spalio – gegužės mėnesiais su finalinio ketverto kulminacija.',
-      rules: 'Pilnos 5x5 FIBA / MKL taisyklės su standartinio aukščio (3.05 m) krepšiais ir 6 arba 7 dydžio kamuoliais. Rungtynėms vadovauja licencijuoti teisėjai ir sekretoriatas.',
-      awards: 'Didžioji Čempionų Lygos taurė, čempionų žiedai / medaliai, finalo MVP statulėlė ir rėmėjų dovanos.'
+      rules: 'Pilnos 5x5 FIBA / MKL taisyklės su standartiniais (3.05 m) krepšiais ir 6 arba 7 dydžio kamuoliais.',
+      awards: 'Didžioji Čempionų Lygos taurė, čempionų medaliai, finalo MVP statulėlė ir rėmėjų dovanos.'
     }
   };
 
   const currentReg = regulations[selectedDiv];
 
   return (
-    <div className="pt-28 pb-20 space-y-12">
-      {/* Header */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-8 text-center space-y-3">
-        <h1 className="text-3xl sm:text-5xl font-black font-display text-slate-900 tracking-tight max-w-3xl mx-auto">
-          Čempionų Lyga
-        </h1>
-        <p className="text-slate-600 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
-          {league.description}
-        </p>
-
-        <div className="pt-2">
-          <Link
-            href="/cempionu-lyga/taisykles"
-            className="inline-flex items-center space-x-1.5 text-xs font-bold text-snaiperis-red hover:text-snaiperis-red-700 bg-red-50 px-4 py-2 rounded-full transition-colors"
-          >
-            <FileText className="w-4 h-4" />
-            <span>Skaityti oficialias varžybų taisykles</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+    <div className="subpage">
+      {/* Editorial Page Header */}
+      <header className="page-header">
+        <div className="site-container page-header-content">
+          <span className="eyebrow"><span className="status-dot" /> Vidinis akademijos čempionatas · U8–U12</span>
+          <h1>Pirmoji komanda.<br /><span>Pirmosios pergalės.</span></h1>
+          <p className="page-header-desc">
+            {league.description}
+          </p>
+          <div className="hero-actions">
+            <Link href="/cempionu-lyga/taisykles" className="button-primary">
+              Oficialios taisyklės <ArrowUpRight size={17} />
+            </Link>
+            <button onClick={onOpenRegister} className="text-link">
+              Registruotis į treniruotes <ArrowRight size={16} />
+            </button>
+          </div>
+          <div className="hero-reassurance" style={{ marginTop: '22px' }}>
+            <Check size={15} /> Dalyvauja visos akademijos salių komandos
+            <span /> Lygus žaidimo laikas visiems vaikams
+            <span /> Medaliai kiekvienam dalyviui
+          </div>
         </div>
-      </section>
+      </header>
 
-      {/* Division Selector & Details */}
-      <section className="max-w-5xl mx-auto px-4 sm:px-8">
-        <div className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200/80 shadow-sm space-y-8">
-          {/* Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 border-b border-slate-100 pb-5">
-            {league.divisions.map(d => (
-              <button
-                key={d.id}
-                onClick={() => handleSelectDiv(d.id as any)}
-                className={`px-5 py-2.5 rounded-full font-bold text-xs sm:text-sm transition-all flex items-center space-x-1.5 ${
-                  selectedDiv === d.id
-                    ? 'bg-snaiperis-red text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                }`}
-              >
-                <Trophy className="w-3.5 h-3.5" />
-                <span>{d.name} ({d.age})</span>
-              </button>
-            ))}
+      {/* Division Tabs & Regulations */}
+      <section className="site-container pb-16">
+        <div className="filter-tabs" style={{ marginBottom: '32px' }}>
+          {league.divisions.map(d => (
+            <button
+              key={d.id}
+              aria-pressed={selectedDiv === d.id}
+              onClick={() => handleSelectDiv(d.id as any)}
+              className="filter-tab"
+              style={{ fontSize: '12px', padding: '10px 20px' }}
+            >
+              {d.name} ({d.age})
+            </button>
+          ))}
+        </div>
+
+        <div className="editorial-card" style={{ padding: '36px' }}>
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-6 border-b border-[var(--line)]">
+            <div>
+              <span className="eyebrow"><span className="status-dot" /> Diviziono formatas</span>
+              <h2 style={{ marginTop: '8px' }}>{currentDiv.name} · {currentDiv.age}</h2>
+              <p style={{ fontSize: '14px', color: 'var(--muted)', marginTop: '8px' }}>{currentDiv.format}</p>
+            </div>
+            <button onClick={onOpenRegister} className="button-primary">
+              Registruotis į komandą <ArrowUpRight size={17} />
+            </button>
           </div>
 
-          {/* Division Details */}
-          <div className="space-y-6">
-            <div className="space-y-2 text-center sm:text-left">
-              <h2 className="text-2xl font-bold font-display text-slate-900">
-                {currentDiv.name} – {currentDiv.age}
-              </h2>
-              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-                {currentDiv.format}
-              </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-6">
+            <div className="editorial-card-warm" style={{ padding: '20px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', fontWeight: 600 }}>Dalyvaujančios komandos</span>
+              <div style={{ fontSize: '32px', fontFamily: "'Outfit', sans-serif", fontWeight: 500, marginTop: '4px' }}>
+                {currentDiv.teamsCount} <span style={{ fontSize: '14px', color: 'var(--muted)' }}>komandų</span>
+              </div>
+              <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>Iš visų akademijos sporto salių Kaune ir rajone</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div className="bg-slate-50/80 border border-slate-200/60 p-5 rounded-2xl flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-xl bg-red-50 text-snaiperis-red flex items-center justify-center font-black text-lg">
-                  {currentDiv.teamsCount}
-                </div>
-                <div>
-                  <div className="font-bold text-slate-900 text-sm">Dalyvaujančių komandų</div>
-                  <div className="text-xs text-slate-500">Iš visų akademijos sporto salių</div>
-                </div>
+            <div className="editorial-card-warm" style={{ padding: '20px' }}>
+              <span style={{ fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '.06em', fontWeight: 600 }}>Apdovanojimai</span>
+              <div style={{ fontSize: '32px', fontFamily: "'Outfit', sans-serif", fontWeight: 500, marginTop: '4px', color: 'var(--red)' }}>
+                100 % <span style={{ fontSize: '14px', color: 'var(--muted)' }}>medaliai</span>
               </div>
-
-              <div className="bg-slate-50/80 border border-slate-200/60 p-5 rounded-2xl flex items-center space-x-4">
-                <div className="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center font-black text-lg">
-                  ★
-                </div>
-                <div>
-                  <div className="font-bold text-slate-900 text-sm">Apdovanojimai & Medaliai</div>
-                  <div className="text-xs text-slate-500">Kiekvienas dalyvis apdovanojamas medaliu</div>
-                </div>
-              </div>
+              <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px' }}>Kiekvienas dalyvis sezono pabaigoje apdovanojamas medaliu</p>
             </div>
+          </div>
 
-            {/* Official Tournament Regulations Accordion / Content Box */}
-            <div className="bg-slate-50 border border-slate-200/80 rounded-2xl p-6 space-y-4 text-xs sm:text-sm text-slate-700">
-              <div className="flex items-center space-x-2 text-slate-900 font-bold text-sm">
-                <ShieldCheck className="w-4 h-4 text-snaiperis-red" />
-                <span>Oficialūs {currentDiv.name} nuostatai ir tvarka</span>
+          {/* Regulations Grid */}
+          <div style={{ marginTop: '28px', borderTop: '1px solid var(--line)', paddingTop: '24px' }}>
+            <h3 style={{ fontSize: '18px', marginBottom: '18px' }}>Oficialūs nuostatai ir tvarka</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs sm:text-sm">
+              <div>
+                <span style={{ color: 'var(--muted)', display: 'block', marginBottom: '4px', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '.06em' }}>Dalyviai</span>
+                <p style={{ fontWeight: 500, color: 'var(--ink)' }}>{currentReg.birth}</p>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="space-y-1">
-                  <div className="font-bold text-slate-900">Dalyviai:</div>
-                  <div className="text-slate-600">{currentReg.birth}</div>
-                </div>
-                <div className="space-y-1">
-                  <div className="font-bold text-slate-900">Vadovavimas:</div>
-                  <div className="text-slate-600">{currentReg.director}</div>
-                </div>
-                <div className="space-y-1 sm:col-span-2">
-                  <div className="font-bold text-slate-900">Vieta ir laikas:</div>
-                  <div className="text-slate-600">{currentReg.timeframe}</div>
-                </div>
-                <div className="space-y-1 sm:col-span-2">
-                  <div className="font-bold text-slate-900">Taisyklės ir inventorius:</div>
-                  <div className="text-slate-600">{currentReg.rules}</div>
-                </div>
-                <div className="space-y-1 sm:col-span-2">
-                  <div className="font-bold text-slate-900">Apdovanojimai:</div>
-                  <div className="text-slate-600">{currentReg.awards}</div>
-                </div>
+              <div>
+                <span style={{ color: 'var(--muted)', display: 'block', marginBottom: '4px', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '.06em' }}>Vyriausiasis teisėjas</span>
+                <p style={{ fontWeight: 500, color: 'var(--ink)' }}>{currentReg.director}</p>
               </div>
-            </div>
-
-            <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-100">
-              <div className="text-xs text-slate-500 text-center sm:text-left">
-                Visi KA „Snaiperis“ auklėtiniai automatiškai įtraukiami į Čempionų Lygos rungtynes.
+              <div className="md:col-span-2">
+                <span style={{ color: 'var(--muted)', display: 'block', marginBottom: '4px', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '.06em' }}>Laikas ir tvarkaraštis</span>
+                <p style={{ color: 'var(--muted)', lineHeight: '1.8' }}>{currentReg.timeframe}</p>
               </div>
-              <button
-                onClick={onOpenRegister}
-                className="w-full sm:w-auto px-7 py-3 bg-snaiperis-red hover:bg-snaiperis-red-600 text-white font-bold rounded-full text-xs uppercase tracking-wider transition-all shadow-sm active:scale-95 shrink-0"
-              >
-                Registruotis į treniruotes
-              </button>
+              <div className="md:col-span-2">
+                <span style={{ color: 'var(--muted)', display: 'block', marginBottom: '4px', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '.06em' }}>Taisyklės ir inventorius</span>
+                <p style={{ color: 'var(--muted)', lineHeight: '1.8' }}>{currentReg.rules}</p>
+              </div>
+              <div className="md:col-span-2">
+                <span style={{ color: 'var(--muted)', display: 'block', marginBottom: '4px', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '.06em' }}>Apdovanojimai</span>
+                <p style={{ color: 'var(--muted)', lineHeight: '1.8' }}>{currentReg.awards}</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Clean Video Section */}
-      <section className="max-w-4xl mx-auto px-4 sm:px-8">
-        <div className="space-y-4 text-center">
-          <h2 className="text-xl sm:text-2xl font-bold font-display text-slate-900">
-            Akimirkos iš Čempionų Lygos
-          </h2>
-          <div className="aspect-video w-full rounded-3xl overflow-hidden shadow-lg border border-slate-200/80 bg-slate-950">
-            <iframe 
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/OnL1ypjS7pc" 
-              title="KA Snaiperis Čempionų Lyga"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+      {/* Video Highlights */}
+      <section className="site-container pb-16">
+        <div className="section-heading">
+          <div>
+            <span className="eyebrow">Aikštelės jaudulys</span>
+            <h2>Čempionų Lygos akimirkos.</h2>
+          </div>
+          <p>Pamatykite, kaip mūsų jaunieji krepšininkai kovoja, palaiko vieni kitus ir džiaugiasi pergalėmis.</p>
+        </div>
+
+        <div style={{ aspectRatio: '16/9', maxHeight: '520px', width: '100%', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--line)', background: '#232a26' }}>
+          <iframe 
+            style={{ width: '100%', height: '100%', border: '0' }}
+            src="https://www.youtube.com/embed/OnL1ypjS7pc" 
+            title="KA Snaiperis Čempionų Lyga"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          />
+        </div>
+      </section>
+
+      {/* Closing CTA */}
+      <section className="closing-section">
+        <div className="site-container">
+          <div className="closing-card">
+            <div className="court-lines" aria-hidden="true" />
+            <div>
+              <span className="eyebrow">Prisijunkite prie lygos</span>
+              <h2>Kiekvienas vaikas<br />gali žaisti krepšinį.</h2>
+              <p>Visi KA „Snaiperis“ auklėtiniai turi galimybę atstovauti savo salės komandai Čempionų Lygoje.</p>
+            </div>
+            <div className="closing-actions">
+              <button onClick={onOpenRegister} className="button-light">
+                Išbandyti nemokamai <ArrowUpRight size={18} />
+              </button>
+              <a href="tel:+37067246656">
+                <Phone size={15} /> +370 672 46 656
+              </a>
+            </div>
           </div>
         </div>
       </section>

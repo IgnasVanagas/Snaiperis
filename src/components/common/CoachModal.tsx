@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, Phone, Mail, Award, MapPin, CheckCircle } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
+import { X, Phone, Mail, ArrowUpRight, MapPin } from 'lucide-react';
 import { Coach } from '../../data/coaches';
 import { locations } from '../../data/locations';
 
@@ -10,99 +10,141 @@ interface CoachModalProps {
 }
 
 export const CoachModal: React.FC<CoachModalProps> = ({ coach, onClose, onRegisterWithCoach }) => {
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!coach) return;
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    closeRef.current?.focus();
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = previous;
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [coach, onClose]);
+
   if (!coach) return null;
 
   const coachGyms = locations.flatMap(d => 
-    d.gyms.filter(g => g.coach.toLowerCase().includes(coach.name.toLowerCase()))
+    d.gyms.filter(g => g.coach.toLowerCase().includes(coach.name.toLowerCase()) || coach.name.toLowerCase().includes(g.coach.toLowerCase()))
       .map(g => ({ ...g, district: d.district }))
   );
 
   return (
     <div 
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade-in"
-      onClick={onClose}
+      className="registration-overlay"
+      onClick={e => { if (e.target === e.currentTarget) onClose(); }}
     >
       <div 
-        className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]"
-        onClick={e => e.stopPropagation()}
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="coach-title"
+        className="registration-dialog"
+        style={{ maxWidth: '560px' }}
       >
         <button 
-          onClick={onClose}
-          className="absolute top-4 right-4 z-10 text-slate-400 hover:text-white p-1 rounded-full bg-slate-900/40 transition-colors"
+          ref={closeRef}
+          onClick={onClose} 
+          aria-label="Uždaryti" 
+          className="icon-button registration-close"
         >
-          <X className="w-5 h-5" />
+          <X size={21} />
         </button>
 
-        {/* Coach Header */}
-        <div className="bg-snaiperis-dark-950 text-white p-6 relative">
-          <div className="flex items-center space-x-4">
-            <div className="w-20 h-20 rounded-xl overflow-hidden border border-white/20 shrink-0 bg-slate-800">
-              <img src={coach.image} alt={coach.name} className="w-full h-full object-cover object-top" />
-            </div>
-            <div>
-              <h2 className="text-xl font-bold font-display text-white">{coach.name}</h2>
-              <div className="text-xs text-snaiperis-red font-semibold mt-0.5">{coach.role}</div>
-            </div>
+        <span className="eyebrow"><span className="status-dot" /> Akademijos pedagogas</span>
+        
+        <div className="flex items-center gap-4 mt-4 pb-5 border-b border-[var(--line)]">
+          <div style={{ width: '72px', height: '72px', borderRadius: '4px', overflow: 'hidden', background: '#e7e8df', flexShrink: 0 }}>
+            <img 
+              src={coach.image} 
+              alt={coach.name} 
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }}
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = '/images/academy-team.jpg';
+              }}
+            />
+          </div>
+          <div>
+            <h2 id="coach-title" style={{ fontSize: '26px', margin: 0, lineHeight: 1.2 }}>
+              {coach.name}
+            </h2>
+            <span style={{ fontSize: '13px', color: 'var(--red)', fontWeight: 600, display: 'block', marginTop: '2px' }}>
+              {coach.role}
+            </span>
           </div>
         </div>
 
-        {/* Coach Body */}
-        <div className="p-6 overflow-y-auto space-y-4 flex-grow text-xs sm:text-sm">
-          <div>
-            <h3 className="text-sm font-bold text-slate-900 mb-1.5">
-              Apie trenerį
-            </h3>
-            <p className="text-slate-600 leading-relaxed">
-              {coach.bio}
-            </p>
-          </div>
+        {/* Bio */}
+        <div style={{ marginTop: '20px' }}>
+          <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '6px' }}>Apie trenerį</h3>
+          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: '1.85', margin: 0 }}>
+            {coach.bio}
+          </p>
+        </div>
 
-          {coachGyms.length > 0 && (
-            <div>
-              <h3 className="text-sm font-bold text-slate-900 mb-2">
-                Treniruočių salės
-              </h3>
-              <div className="space-y-1.5">
-                {coachGyms.map((g, idx) => (
-                  <div key={idx} className="bg-slate-50 border border-slate-200 rounded-xl p-3">
-                    <div className="font-bold text-slate-900 text-xs">{g.name}</div>
-                    <div className="text-[11px] text-slate-500 mt-0.5">{g.district} • {g.address}</div>
-                    <div className="text-[11px] text-slate-600 mt-0.5">
-                      Gimimo metai: {g.years.join(', ')} m.
-                    </div>
+        {/* Gyms */}
+        {coachGyms.length > 0 && (
+          <div style={{ marginTop: '20px' }}>
+            <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '8px' }}>Treniruočių salės</h3>
+            <div style={{ display: 'grid', gap: '8px' }}>
+              {coachGyms.map((g, idx) => (
+                <div key={idx} className="editorial-card-warm" style={{ padding: '12px 16px', borderRadius: '4px' }}>
+                  <div className="flex items-center justify-between">
+                    <strong style={{ fontSize: '13px', color: 'var(--ink)' }}>{g.name}</strong>
+                    <span className="tag-badge tag-badge-red">{g.district}</span>
                   </div>
-                ))}
-              </div>
+                  <div className="flex items-center gap-1 text-xs mt-1" style={{ color: 'var(--muted)' }}>
+                    <MapPin size={12} />
+                    <span>{g.address} · Gimimo metai: {g.years.join(', ')} m.</span>
+                  </div>
+                </div>
+              ))}
             </div>
-          )}
+          </div>
+        )}
 
-          {/* Contact buttons */}
-          <div className="grid grid-cols-2 gap-2 pt-2">
-            <a
+        {/* Contact Links */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '20px' }}>
+          {coach.phone && (
+            <a 
               href={`tel:${coach.phone.replace(/\s+/g, '')}`}
-              className="flex items-center justify-center space-x-1.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold rounded-xl text-xs transition-colors"
+              className="filter-tab active flex items-center gap-2"
+              style={{ textDecoration: 'none', fontSize: '12px', padding: '8px 14px' }}
             >
-              <Phone className="w-3.5 h-3.5 text-snaiperis-red" />
+              <Phone size={13} />
               <span>{coach.phone}</span>
             </a>
-            <a
+          )}
+          {coach.email && (
+            <a 
               href={`mailto:${coach.email}`}
-              className="flex items-center justify-center space-x-1.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold rounded-xl text-xs transition-colors"
+              className="filter-tab flex items-center gap-2"
+              style={{ textDecoration: 'none', fontSize: '12px', padding: '8px 14px' }}
             >
-              <Mail className="w-3.5 h-3.5 text-snaiperis-red" />
-              <span>El. paštas</span>
+              <Mail size={13} />
+              <span>{coach.email}</span>
             </a>
-          </div>
+          )}
+        </div>
 
+        {/* Primary Action Button */}
+        <div style={{ marginTop: '24px', paddingTop: '18px', borderTop: '1px solid var(--line)' }}>
           <button
             onClick={() => {
               onClose();
               onRegisterWithCoach(coach.name);
             }}
-            className="w-full py-2.5 bg-snaiperis-red hover:bg-snaiperis-red-600 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-colors flex items-center justify-center space-x-1.5"
+            className="button-primary"
+            style={{ width: '100%' }}
           >
-            <CheckCircle className="w-4 h-4" />
-            <span>Registruotis pas šį trenerį</span>
+            Registruotis pas šį trenerį <ArrowUpRight size={17} />
           </button>
         </div>
       </div>
